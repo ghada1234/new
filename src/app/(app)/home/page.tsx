@@ -6,7 +6,7 @@ import { useLocale } from '@/contexts/locale-context';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, Utensils, Lightbulb, LayoutDashboard, User } from 'lucide-react';
+import { ArrowRight, Utensils, Lightbulb } from 'lucide-react';
 import { useLoggedMeals } from '@/contexts/logged-meal-context';
 import { usePreferences } from '@/contexts/preferences-context';
 import { useMemo } from 'react';
@@ -70,15 +70,15 @@ function ActionCard({ title, href, icon: Icon }: { title: string, href: string, 
     )
 }
 
+const actionCards = [
+    { labelKey: 'analyzeMeal' as const, href: '/analyze', icon: Utensils },
+    { labelKey: 'aiMealSuggestions' as const, href: '/suggestions', icon: Lightbulb },
+];
+
 export default function HomePage() {
   const { user } = useAuth();
   const { t } = useLocale();
   
-  const actionCards = [
-      { title: t('analyzeMeal'), href: '/analyze', icon: Utensils },
-      { title: t('aiMealSuggestions'), href: '/suggestions', icon: Lightbulb },
-  ]
-
   return (
     <div className="flex flex-1 flex-col gap-8">
       <div>
@@ -91,7 +91,7 @@ export default function HomePage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <QuickStatCard />
           {actionCards.map(card => (
-              <ActionCard key={card.href} {...card} />
+              <ActionCard key={card.href} title={t(card.labelKey)} href={card.href} icon={card.icon} />
           ))}
       </div>
 
