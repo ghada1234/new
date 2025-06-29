@@ -30,18 +30,6 @@ export function DishNameInput() {
     setAnalysisResult(null);
     try {
       const result = await analyzeDishName({ dishName, portionSize });
-      
-      const isWater = result.foodItems.some(item => item.name.toLowerCase().includes('water'));
-
-      // The AI should return > 0 calories for food. If not, we consider it a failure to identify.
-      if (result.estimatedCalories <= 0 && !isWater) {
-          toast({
-              title: t('couldNotIdentifyFood'),
-              description: t('couldNotIdentifyFoodByName', { dishName }),
-              variant: "destructive"
-          });
-          return;
-      }
       setAnalysisResult(result);
     } catch (error) {
       console.error('Analysis failed:', error);
