@@ -18,8 +18,8 @@ export default function AboutPage() {
         <CardContent className="space-y-4">
            <div className="flex flex-col md:flex-row gap-8 items-center">
             <Avatar className="h-32 w-32">
-                <AvatarImage src="https://placehold.co/128x128.png" data-ai-hint="person portrait" />
-                <AvatarFallback>Me</AvatarFallback>
+                <AvatarImage src="/lina-profile.jpg" data-ai-hint="woman portrait" />
+                <AvatarFallback>Lina</AvatarFallback>
             </Avatar>
             <p className="text-muted-foreground text-lg">
               {t('aboutMeDescription')}
