@@ -1,3 +1,4 @@
+
 'use client';
 import React, {
   createContext,
@@ -14,6 +15,9 @@ import {
   signOut,
   updateProfile,
   type User,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import { auth as firebaseAuth, isFirebaseConfigured } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
@@ -24,6 +28,8 @@ interface AuthContextType {
   loading: boolean;
   register: (data: RegisterData) => Promise<User | null>;
   login: (email: string, pass: string) => Promise<User | null>;
+  signInWithGoogle: () => Promise<User | null>;
+  signInWithFacebook: () => Promise<User | null>;
   logout: () => Promise<void>;
 }
 
@@ -105,6 +111,26 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     return userCredential.user;
   };
 
+  const signInWithGoogle = async () => {
+    if (!isFirebaseConfigured()) {
+      setUser(mockUser);
+      return mockUser;
+    }
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(firebaseAuth, provider);
+    return result.user;
+  };
+
+  const signInWithFacebook = async () => {
+    if (!isFirebaseConfigured()) {
+      setUser(mockUser);
+      return mockUser;
+    }
+    const provider = new FacebookAuthProvider();
+    const result = await signInWithPopup(firebaseAuth, provider);
+    return result.user;
+  };
+
   const logout = async () => {
     if (!isFirebaseConfigured()) {
       setUser(null);
@@ -116,7 +142,17 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        register,
+        login,
+        signInWithGoogle,
+        signInWithFacebook,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

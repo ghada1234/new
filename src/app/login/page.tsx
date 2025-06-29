@@ -37,10 +37,12 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, signInWithGoogle, signInWithFacebook } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isFacebookLoading, setIsFacebookLoading] = useState(false);
   const { t } = useLocale();
 
   const form = useForm<LoginData>({
@@ -50,6 +52,8 @@ export default function LoginPage() {
       password: '',
     },
   });
+
+  const anyLoading = isLoading || isGoogleLoading || isFacebookLoading;
 
   async function onSubmit(data: LoginData) {
     setIsLoading(true);
@@ -71,6 +75,48 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   }
+
+  const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    try {
+      await signInWithGoogle();
+      toast({
+        title: t('loginSuccessTitle'),
+        description: t('loginSuccessDescription'),
+      });
+      router.push('/dashboard');
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: t('loginErrorTitle'),
+        description: t('loginErrorDescription'),
+        variant: 'destructive',
+      });
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    setIsFacebookLoading(true);
+    try {
+      await signInWithFacebook();
+      toast({
+        title: t('loginSuccessTitle'),
+        description: t('loginSuccessDescription'),
+      });
+      router.push('/dashboard');
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: t('loginErrorTitle'),
+        description: t('loginErrorDescription'),
+        variant: 'destructive',
+      });
+    } finally {
+      setIsFacebookLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40">
@@ -95,6 +141,7 @@ export default function LoginPage() {
                         placeholder="m@example.com"
                         type="email"
                         {...field}
+                        disabled={anyLoading}
                       />
                     </FormControl>
                     <FormMessage />
@@ -110,18 +157,41 @@ export default function LoginPage() {
                       <FormLabel>{t('password')}</FormLabel>
                     </div>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input type="password" {...field} disabled={anyLoading} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full" disabled={anyLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {t('login')}
               </Button>
             </form>
           </Form>
+
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                {t('orContinueWith')}
+              </span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" onClick={handleGoogleLogin} disabled={anyLoading}>
+              {isGoogleLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Google
+            </Button>
+            <Button variant="outline" onClick={handleFacebookLogin} disabled={anyLoading}>
+              {isFacebookLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Facebook
+            </Button>
+          </div>
+
           <div className="mt-4 text-center text-sm">
             {t('noAccount')}{' '}
             <Link href="/register" className="underline">

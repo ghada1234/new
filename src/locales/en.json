@@ -138,5 +138,6 @@
   "sampleSuggestions": "Sample Suggestions",
   "light": "Light",
   "dark": "Dark",
-  "system": "System"
+  "system": "System",
+  "orContinueWith": "Or continue with"
 }
