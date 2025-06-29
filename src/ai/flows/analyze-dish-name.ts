@@ -26,13 +26,13 @@ const prompt = ai.definePrompt({
   name: 'analyzeDishNamePrompt',
   input: { schema: AnalyzeDishNameInputSchema },
   output: { schema: NutritionalInfoSchema },
-  prompt: `You are a nutritional analysis AI. Your task is to analyze the provided dish name and return a detailed nutritional estimate.
+  prompt: `You are a nutritional analysis AI with expertise in a wide variety of international cuisines, including Middle Eastern and specifically Iraqi food. Your task is to analyze the provided dish name, which can be in any language including Arabic, and return a detailed nutritional estimate.
 
 Dish Name: {{{dishName}}}
 {{#if portionSize}}Portion Size: {{{portionSize}}}{{/if}}
 
 CRITICAL INSTRUCTIONS:
-1.  **Identify the Food**: You MUST identify at least one food item in the \`foodItems\` array. The input is always a food item. Make a best-effort guess if you are unsure (e.g., if the input is "Torsken", identify it as "Cod fish"). Do not return an empty array for \`foodItems\`. If the input is not a food, identify it as what it is (e.g., "a chair").
+1.  **Identify the Food**: You MUST identify at least one food item in the \`foodItems\` array. The input is always a food item. Make a best-effort guess if you are unsure (e.g., if the input is "مسكوف", identify it as "Masgouf (Iraqi grilled fish)"). Do not return an empty array for \`foodItems\`. If the input is not a food, identify it as what it is (e.g., "a chair").
 2.  **List Ingredients**: You MUST provide a list of estimated ingredients in the \`ingredients\` array.
 3.  **Estimate Calories**: You MUST provide an \`estimatedCalories\` value. For any identified food, this value MUST be greater than zero. Only plain water can have zero calories. If the input is not a food, return 0.
 4.  **Explain**: You MUST provide a brief \`explanation\` for your analysis.
