@@ -31,7 +31,9 @@ export function DishNameInput() {
     setAnalysisResult(null);
     try {
       const result = await analyzeDishName({ dishName, portionSize });
-      if ((!result.foodItems || result.foodItems.length === 0) && (!result.estimatedCalories || result.estimatedCalories <= 0)) {
+      // This is a robust check to ensure we don't show nonsensical results.
+      // The AI should not return 0 calories for an identified food, and this prevents it from being displayed.
+      if (!result || !result.foodItems || result.foodItems.length === 0 || (result.estimatedCalories !== 0 && !result.estimatedCalories)) {
           toast({
               title: t('couldNotIdentifyFood'),
               description: t('couldNotIdentifyFoodByName', { dishName }),
