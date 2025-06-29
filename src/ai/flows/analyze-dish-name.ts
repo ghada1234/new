@@ -25,17 +25,18 @@ const prompt = ai.definePrompt({
   name: 'analyzeDishNamePrompt',
   input: { schema: AnalyzeDishNameInputSchema },
   output: { schema: NutritionalInfoSchema },
-  prompt: `You are a nutritional expert AI. You are given the name of a dish, which may be in any language including Arabic, and an optional portion size.
-  Based on this information, you will estimate the nutritional content of the dish.
+  prompt: `You are a nutritional expert AI with extensive knowledge of international cuisines. You are given the name of a dish, which may be in any language including Arabic, and an optional portion size.
+  Your task is to identify the dish, considering its cultural origin, and estimate its nutritional content.
   
   Dish Name: {{{dishName}}}
   {{#if portionSize}}Portion Size: {{{portionSize}}}{{/if}}
   
   CRITICAL RULES:
   1. Your entire response MUST be only a single, valid JSON object. Do not include any other text, explanations, or markdown formatting like \`\`\`json.
-  2. For any input that could plausibly be a food item (e.g., 'pizza', 'sushi', 'apple pie', 'سلطة'), you MUST identify it. This means the "foodItems" array must not be empty, and "estimatedCalories" MUST be a number greater than 0.
-  3. You should only return an empty "foodItems" array and 0 calories if the input is unambiguously NOT a food item (e.g., "a rock", "un rocher", "a car").
-  4. If you cannot estimate a specific nutrient for a food item, omit that nutrient's key from the JSON object. Do not use a value of 0, except for "estimatedCalories" in the case of non-food items as described in rule 3.`,
+  2. You MUST recognize a wide variety of international dishes. For any input that could plausibly be a food item (e.g., 'pizza', 'sushi', 'falafel', 'tacos', 'koshary', 'سلطة'), you MUST identify it.
+  3. If a food item is identified, the "foodItems" array MUST NOT be empty, and "estimatedCalories" MUST be a number greater than 0. This is a strict requirement.
+  4. Only return an empty "foodItems" array and 0 calories if the input is unambiguously NOT a food item (e.g., "a rock", "a car", "a shoe").
+  5. If you cannot estimate a specific nutrient, omit that nutrient's key from the JSON. Do not use a value of 0 unless it is truly zero.`,
 });
 
 const analyzeDishNameFlow = ai.defineFlow(

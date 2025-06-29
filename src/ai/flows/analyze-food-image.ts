@@ -22,17 +22,17 @@ const prompt = ai.definePrompt({
   name: 'analyzeFoodImagePrompt',
   input: { schema: AnalyzeFoodImageInputSchema },
   output: { schema: NutritionalInfoSchema },
-  prompt: `You are an expert nutritionist. Analyze the image of the meal and provide estimated nutritional information for the entire meal shown.
+  prompt: `You are an expert nutritionist with knowledge of international cuisines. Analyze the image of the meal and provide estimated nutritional information for the entire meal shown.
+  Your response MUST be a single, valid JSON object that conforms to the specified schema.
   
-Your response MUST be a single, valid JSON object that conforms to the specified schema.
-
-Photo: {{media url=photoDataUri}}
-
-CRITICAL RULES:
-1. Your entire response MUST be only the JSON object. Do not include any other text, explanations, or markdown formatting like \`\`\`json.
-2. If the image contains what appears to be food, you MUST identify it. This means the "foodItems" array must not be empty, and "estimatedCalories" MUST be a number greater than 0.
-3. You should only return an empty "foodItems" array and 0 calories if the image unambiguously contains NO food items.
-4. If you cannot estimate a specific nutrient for a food item, omit that nutrient's key from the JSON object. Do not use a value of 0, except for "estimatedCalories" in the case of non-food items as described in rule 3.`,
+  Photo: {{media url=photoDataUri}}
+  
+  CRITICAL RULES:
+  1. Your entire response MUST be only the JSON object. Do not include any other text, explanations, or markdown formatting like \`\`\`json.
+  2. You MUST be able to identify a wide range of international dishes from images. If the image contains what appears to be food, you MUST identify it.
+  3. If food is identified, the "foodItems" array MUST NOT be empty, and "estimatedCalories" MUST be a number greater than 0. This is a strict requirement.
+  4. Only return an empty "foodItems" array and 0 calories if the image unambiguously contains NO food items.
+  5. If you cannot estimate a specific nutrient for a food item, omit that nutrient's key from the JSON. Do not use a value of 0 unless it is truly zero.`,
 });
 
 const analyzeFoodImageFlow = ai.defineFlow(
