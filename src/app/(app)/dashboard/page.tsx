@@ -12,13 +12,14 @@ import {
 } from '@/components/ui/card';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import {
-  Flame,
   Beef,
   Wheat,
   Droplets,
 } from 'lucide-react';
 import { useLocale } from '@/contexts/locale-context';
 import { NutrientDisplay } from '@/components/analysis/nutrient-display';
+import { usePreferences } from '@/contexts/preferences-context';
+import { Progress } from '@/components/ui/progress';
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
     <Card>
@@ -32,9 +33,33 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, 
     </Card>
 );
 
+const CalorieProgressCard = ({ consumed, target }: { consumed: number; target: number }) => {
+    const { t } = useLocale();
+    const remaining = Math.max(0, target - consumed);
+    const progress = target > 0 ? (consumed / target) * 100 : 0;
+
+    return (
+        <Card className="lg:col-span-1">
+            <CardHeader>
+                <CardTitle>{t('calorieGoal')}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <Progress value={progress} className="h-4" />
+                <div className="flex justify-between text-sm font-medium">
+                    <span>{t('consumed')}: {consumed.toFixed(0)} {t('calories')}</span>
+                    <span>{t('remaining')}: {remaining.toFixed(0)} {t('calories')}</span>
+                </div>
+                <p className="text-sm text-center text-muted-foreground">{t('target')}: {target} {t('calories')}</p>
+            </CardContent>
+        </Card>
+    );
+};
+
+
 export default function DashboardPage() {
-  const { loggedMeals, isLoading } = useLoggedMeals();
+  const { loggedMeals, isLoading: mealsLoading } = useLoggedMeals();
   const { t, locale } = useLocale();
+  const { targetCalories, isLoading: prefsLoading } = usePreferences();
   
   const todayMeals = useMemo(() => {
     const today = startOfDay(new Date());
@@ -117,7 +142,7 @@ export default function DashboardPage() {
       snack: t('snack')
   }
 
-  if (isLoading) {
+  if (mealsLoading || prefsLoading) {
     return <div>Loading...</div>;
   }
 
@@ -125,7 +150,7 @@ export default function DashboardPage() {
     <div className="flex flex-1 flex-col gap-4">
       <h1 className="font-headline text-2xl font-bold">{t('dashboardToday')}</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title={t('totalCalories')} value={`${dailyStats.totalCalories.toFixed(0)} ${t('calories')}`} icon={Flame} />
+        <CalorieProgressCard consumed={dailyStats.totalCalories} target={targetCalories} />
         <StatCard title={t('protein')} value={`${dailyStats.totalProtein.toFixed(0)} ${t('grams')}`} icon={Beef} />
         <StatCard title={t('carbohydrates')} value={`${dailyStats.totalCarbs.toFixed(0)} ${t('grams')}`} icon={Wheat} />
         <StatCard title={t('fat')} value={`${dailyStats.totalFat.toFixed(0)} ${t('grams')}`} icon={Droplets} />

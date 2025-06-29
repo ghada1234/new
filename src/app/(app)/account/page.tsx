@@ -13,14 +13,36 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useLocale } from '@/contexts/locale-context';
+import { usePreferences } from '@/contexts/preferences-context';
+import { useToast } from '@/hooks/use-toast';
+import { useEffect, useState } from 'react';
 
 export default function AccountPage() {
   const { user } = useAuth();
   const { t } = useLocale();
+  const { targetCalories, setTargetCalories } = usePreferences();
+  const [calories, setCalories] = useState(targetCalories.toString());
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Update local state when the context value changes (e.g., on initial load)
+    setCalories(targetCalories.toString());
+  }, [targetCalories]);
 
   if (!user) {
     return null;
   }
+  
+  const handleGoalsSaveChanges = () => {
+    const newTarget = parseInt(calories, 10);
+    if (!isNaN(newTarget) && newTarget > 0) {
+      setTargetCalories(newTarget);
+      toast({
+        title: t('saveSuccessTitle'),
+        description: t('saveSuccessDescription'),
+      });
+    }
+  };
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -46,6 +68,25 @@ export default function AccountPage() {
             <Input id="email" readOnly defaultValue={user.email ?? ''} />
           </div>
           <Button>{t('saveChanges')}</Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('healthGoals')}</CardTitle>
+          <CardDescription>{t('healthGoalsDescription')}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-2">
+            <Label htmlFor="targetCalories">{t('targetDailyCalories')}</Label>
+            <Input
+              id="targetCalories"
+              type="number"
+              value={calories}
+              onChange={(e) => setCalories(e.target.value)}
+            />
+          </div>
+          <Button onClick={handleGoalsSaveChanges}>{t('saveChanges')}</Button>
         </CardContent>
       </Card>
     </div>
