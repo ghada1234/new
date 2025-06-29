@@ -60,11 +60,18 @@ const suggestMealsFlow = ai.defineFlow(
     inputSchema: SuggestMealsInputSchema,
     outputSchema: SuggestMealsOutputSchema,
   },
-  async input => {
-    const { output } = await prompt(input);
-    if (!output) {
-      throw new Error('Suggestion generation failed: AI returned no output or it was in the wrong format.');
+  async (input) => {
+    try {
+      const { output } = await prompt(input);
+      if (!output) {
+        throw new Error('Suggestion generation failed: AI returned no output or it was in the wrong format.');
+      }
+      return output;
+    } catch (e) {
+      console.error('[NutriSnap] Error in suggestMealsFlow:', e);
+      throw new Error(
+        'An error occurred during AI analysis. Please try again.'
+      );
     }
-    return output;
   }
 );

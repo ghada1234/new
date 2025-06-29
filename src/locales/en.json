@@ -134,5 +134,6 @@
   "calorieGoal": "Today's Calorie Goal",
   "consumed": "Consumed",
   "remaining": "Remaining",
-  "target": "Target"
+  "target": "Target",
+  "sampleSuggestions": "Sample Suggestions"
 }

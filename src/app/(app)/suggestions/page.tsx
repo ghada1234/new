@@ -88,19 +88,104 @@ function SuggestionCard({ suggestion }: { suggestion: SuggestMealsOutput[0] }) {
   );
 }
 
+const sampleSuggestionsEn: SuggestMealsOutput = [
+    {
+      name: 'Iraqi Dolma (Stuffed Vegetables)',
+      ingredients: 'Onions, tomatoes, bell peppers, zucchini, rice, minced lamb or beef, parsley, dill, mint, pomegranate molasses, lemon juice.',
+      instructions: '1. Prepare the vegetables by hollowing them out.\n2. Mix rice, meat, herbs, and spices for the filling.\n3. Stuff the vegetables with the mixture.\n4. Arrange stuffed vegetables in a pot, add water and pomegranate molasses.\n5. Simmer until cooked through.',
+      nutrition: {
+        foodItems: [{ name: 'Dolma' }],
+        estimatedCalories: 350,
+        estimatedProtein: 15,
+        estimatedCarbs: 40,
+        estimatedFat: 15,
+        explanation: 'Estimated nutrition for a medium serving of homemade Dolma.'
+      }
+    },
+    {
+      name: 'Tabbouleh Salad',
+      ingredients: 'Fine bulgur, parsley, mint, tomatoes, onions, lemon juice, olive oil.',
+      instructions: '1. Soak bulgur wheat.\n2. Finely chop parsley, mint, tomatoes, and onions.\n3. Combine all ingredients.\n4. Dress with lemon juice and olive oil.',
+      nutrition: {
+        foodItems: [{ name: 'Tabbouleh' }],
+        estimatedCalories: 150,
+        estimatedProtein: 4,
+        estimatedCarbs: 20,
+        estimatedFat: 7,
+        explanation: 'Estimated nutrition for a standard side salad portion.'
+      }
+    },
+    {
+      name: 'Quzi (Slow-Roasted Lamb)',
+      ingredients: 'Lamb shoulder or leg, rice, vermicelli noodles, peas, carrots, raisins, almonds, spices (cardamom, cinnamon, allspice).',
+      instructions: '1. Slow-roast the lamb with spices until tender.\n2. Cook rice with vermicelli.\n3. Garnish with fried nuts, raisins, and vegetables.\n4. Serve the lamb on a bed of the prepared rice.',
+      nutrition: {
+        foodItems: [{ name: 'Quzi' }],
+        estimatedCalories: 600,
+        estimatedProtein: 40,
+        estimatedCarbs: 55,
+        estimatedFat: 25,
+        explanation: 'Estimated nutrition for a generous serving of Quzi.'
+      }
+    }
+  ];
+
+const sampleSuggestionsAr: SuggestMealsOutput = [
+    {
+      name: 'دولمة عراقية (خضروات محشية)',
+      ingredients: 'بصل، طماطم، فلفل حلو، كوسا، أرز، لحم مفروم (ضأن أو بقر)، بقدونس، شبت، نعناع، دبس رمان، عصير ليمون.',
+      instructions: '1. تحضير الخضروات عن طريق تفريغها.\n2. خلط الأرز واللحم والأعشاب والتوابل للحشوة.\n3. حشو الخضروات بالخليط.\n4. ترتيب الخضروات المحشوة في قدر، وإضافة الماء ودبس الرمان.\n5. الطهي على نار هادئة حتى تنضج تمامًا.',
+      nutrition: {
+        foodItems: [{ name: 'دولمة' }],
+        estimatedCalories: 350,
+        estimatedProtein: 15,
+        estimatedCarbs: 40,
+        estimatedFat: 15,
+        explanation: 'تقدير غذائي لحصة متوسطة من الدولمة المصنوعة منزليًا.'
+      }
+    },
+    {
+      name: 'سلطة تبولة',
+      ingredients: 'برغل ناعم، بقدونس، نعناع، طماطم، بصل، عصير ليمون، زيت زيتون.',
+      instructions: '1. نقع البرغل.\n2. فرم البقدونس والنعناع والطماطم والبصل ناعماً.\n3. خلط جميع المكونات.\n4. تتبيل السلطة بعصير الليمون وزيت الزيتون.',
+      nutrition: {
+        foodItems: [{ name: 'تبولة' }],
+        estimatedCalories: 150,
+        estimatedProtein: 4,
+        estimatedCarbs: 20,
+        estimatedFat: 7,
+        explanation: 'تقدير غذائي لحصة سلطة جانبية قياسية.'
+      }
+    },
+    {
+      name: 'قوزي (لحم خروف مشوي ببطء)',
+      ingredients: 'كتف أو فخذ خروف، أرز، شعيرية، بازلاء، جزر، زبيب، لوز، بهارات (هيل، قرفة، بهار حلو).',
+      instructions: '1. شوي لحم الخروف ببطء مع البهارات حتى يصبح طريًا.\n2. طبخ الأرز مع الشعيرية.\n3. التزيين بالمكسرات المقلية والزبيب والخضروات.\n4. تقديم اللحم فوق طبقة من الأرز المحضر.',
+      nutrition: {
+        foodItems: [{ name: 'قوزي' }],
+        estimatedCalories: 600,
+        estimatedProtein: 40,
+        estimatedCarbs: 55,
+        estimatedFat: 25,
+        explanation: 'تقدير غذائي لحصة سخية من القوزي.'
+      }
+    }
+  ];
+
 
 export default function SuggestionsPage() {
+  const { t, locale } = useLocale();
   const [preferences, setPreferences] = useState({
     dietaryRestrictions: '',
     allergies: '',
     caloricIntake: '2000',
   });
+  const [isSample, setIsSample] = useState(true);
   const [suggestions, setSuggestions] = useState<SuggestMealsOutput | null>(
-    null
+    locale === 'ar' ? sampleSuggestionsAr : sampleSuggestionsEn
   );
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { t, locale } = useLocale();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -109,6 +194,7 @@ export default function SuggestionsPage() {
 
   const getSuggestions = async () => {
     setIsLoading(true);
+    setIsSample(false);
     setSuggestions(null);
     try {
       const result = await suggestMeals({
@@ -184,9 +270,9 @@ export default function SuggestionsPage() {
         {t('getSuggestions')}
       </Button>
 
-      {suggestions && (
+      {suggestions && suggestions.length > 0 && (
         <div className="mt-6 space-y-4">
-            <h2 className="font-headline text-xl font-bold">{t('hereAreYourSuggestions')}</h2>
+            <h2 className="font-headline text-xl font-bold">{isSample ? t('sampleSuggestions') : t('hereAreYourSuggestions')}</h2>
             <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
                 {suggestions.map((suggestion, index) => (
                     <SuggestionCard key={index} suggestion={suggestion} />

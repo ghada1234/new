@@ -46,12 +46,19 @@ const analyzeDishNameFlow = ai.defineFlow(
     inputSchema: AnalyzeDishNameInputSchema,
     outputSchema: NutritionalInfoSchema,
   },
-  async input => {
-    const { output } = await prompt(input);
-    if (!output) {
-      // This can happen if the model call fails, is blocked, or returns JSON that doesn't match the required schema.
-      throw new Error('AI model failed to return a valid analysis.');
+  async (input) => {
+    try {
+      const { output } = await prompt(input);
+      if (!output) {
+        // This can happen if the model call fails, is blocked, or returns JSON that doesn't match the required schema.
+        throw new Error('AI model failed to return a valid analysis.');
+      }
+      return output;
+    } catch (e) {
+      console.error('[NutriSnap] Error in analyzeDishNameFlow:', e);
+      throw new Error(
+        'An error occurred during AI analysis. Please try again.'
+      );
     }
-    return output;
   }
 );
