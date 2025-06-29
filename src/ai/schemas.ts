@@ -3,6 +3,7 @@ import { z } from 'zod';
 // This is the most detailed output schema, which can be reused by all estimators.
 export const NutritionalInfoSchema = z.object({
   foodItems: z.array(z.object({ name: z.string() })).min(1, { message: "AI must identify at least one food item." }).describe("An array of food items identified in the meal. This cannot be empty."),
+  ingredients: z.array(z.string()).optional().describe("An estimated list of ingredients for the dish."),
   estimatedCalories: z.number().describe('The estimated calorie count of the dish. Must be greater than 0 for any food item.'),
   estimatedProtein: z.number().optional().describe('Estimated protein content in grams'),
   estimatedCarbs: z.number().optional().describe('Estimated carbohydrates content in grams'),

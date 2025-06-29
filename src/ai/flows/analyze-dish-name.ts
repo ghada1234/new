@@ -33,9 +33,10 @@ Dish Name: {{{dishName}}}
 
 CRITICAL INSTRUCTIONS:
 1.  **Identify the Food**: You MUST identify at least one food item in the \`foodItems\` array. The input is always a food item. Make a best-effort guess if you are unsure (e.g., if the input is "Torsken", identify it as "Cod fish"). Do not return an empty array for \`foodItems\`. If the input is not a food, identify it as what it is (e.g., "a chair").
-2.  **Estimate Calories**: You MUST provide an \`estimatedCalories\` value. For any identified food, this value MUST be greater than zero. Only plain water can have zero calories. If the input is not a food, return 0.
-3.  **Explain**: You MUST provide a brief \`explanation\` for your analysis.
-4.  **Full Nutrition**: Fill out as many of the other nutritional fields (protein, fat, vitamins, etc.) as you can based on the identified food.
+2.  **List Ingredients**: You MUST provide a list of estimated ingredients in the \`ingredients\` array.
+3.  **Estimate Calories**: You MUST provide an \`estimatedCalories\` value. For any identified food, this value MUST be greater than zero. Only plain water can have zero calories. If the input is not a food, return 0.
+4.  **Explain**: You MUST provide a brief \`explanation\` for your analysis.
+5.  **Full Nutrition**: Fill out as many of the other nutritional fields (protein, fat, vitamins, etc.) as you can based on the identified food.
 `
 });
 
