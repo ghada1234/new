@@ -1,3 +1,4 @@
+
 'use server';
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
@@ -25,28 +26,27 @@ const prompt = ai.definePrompt({
   name: 'analyzeDishNamePrompt',
   input: { schema: AnalyzeDishNameInputSchema },
   output: { schema: NutritionalInfoSchema },
-  prompt: `You are a world-class nutritional AI assistant. Your primary function is to analyze a dish name, which can be in any language, and provide a detailed nutritional estimate. You must always identify a food unless the input is clearly not food.
+  prompt: `You are a nutritional analysis AI. Your task is to analyze the provided dish name and return a nutritional estimate in JSON format.
 
 Dish Name: {{{dishName}}}
 {{#if portionSize}}Portion Size: {{{portionSize}}}{{/if}}
 
-Follow these instructions with absolute precision:
-1.  **Output Format**: Your entire output must be a single, valid JSON object that strictly adheres to the provided schema. Do not add any extra text or markdown.
-2.  **Food Identification is Mandatory**: You MUST identify a food item in the \`foodItems\` array if the input is even remotely a food.
-3.  **No Zero-Calorie Foods**: If you identify a food, the \`estimatedCalories\` MUST be greater than 0. The only exception is 'water'. If you think a food is low-calorie, provide a low, non-zero estimate. For example, for 'green salad', estimate at least 15-20 calories, not 0.
-4.  **Be Comprehensive**: Provide estimates for as many nutrients (macro and micro) as possible. If a nutrient value is genuinely zero, you can omit the key.
-5.  **Explain Your Reasoning**: Briefly explain your analysis in the \`explanation\` field. For example: "Based on 'Koshary', a common Egyptian dish, this estimate is for a standard serving size. It contains rice, lentils, and pasta, contributing to the carbs, and is topped with a tomato-vinegar sauce."
-6.  **Handle Non-Food**: Only if the input is unambiguously NOT a food item (e.g., "a pencil", "running shoes"), you must return \`{"foodItems": [], "estimatedCalories": 0}\`.
-7.  **Educated Guesses**: If a dish name is ambiguous or you're unsure, make a well-reasoned guess based on the most likely interpretation. It is better to provide a reasonable estimate for a plausible food than to fail the request.
+CRITICAL RULES:
+1.  **JSON ONLY**: Your entire response MUST be a single, valid JSON object matching the output schema. No extra text.
+2.  **ALWAYS IDENTIFY FOOD**: You MUST make a best-effort guess to identify a food item. If the input is "Torsken", guess it's "Cod fish". For any plausible food, you MUST identify it.
+3.  **NEVER ZERO CALORIES FOR FOOD**: If \`foodItems\` is not empty, \`estimatedCalories\` MUST be a number greater than 0. A green salad is not 0 calories, it's at least 15. The only exception is plain "water".
+4.  **HANDLE NON-FOOD**: Only if the input is definitively NOT a food item (e.g., "chair", "running"), return \`{"foodItems": [], "estimatedCalories": 0}\`.
+5.  **EXPLAIN**: Briefly justify your estimate in the \`explanation\` field.
 
-Example of a good response for the input "Falafel wrap":
+Example Input: "Koshary"
+Example Output:
 {
-  "foodItems": [{"name": "Falafel Wrap"}],
-  "estimatedCalories": 450,
-  "estimatedProtein": 15,
-  "estimatedCarbs": 55,
-  "estimatedFat": 20,
-  "explanation": "Estimate for a standard falafel wrap with tahini sauce and vegetables. Calories come from the fried falafel, pita bread, and sauce."
+  "foodItems": [{"name": "Koshary"}],
+  "estimatedCalories": 500,
+  "estimatedProtein": 20,
+  "estimatedCarbs": 90,
+  "estimatedFat": 8,
+  "explanation": "Estimate for a standard serving of Koshary, an Egyptian dish with rice, pasta, and lentils."
 }
 `
 });
