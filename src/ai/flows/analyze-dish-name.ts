@@ -36,7 +36,8 @@ CRITICAL INSTRUCTIONS:
 2.  **List Ingredients**: You MUST provide a list of estimated ingredients in the \`ingredients\` array.
 3.  **Estimate Calories**: You MUST provide an \`estimatedCalories\` value. For any identified food, this value MUST be greater than zero. Only plain water can have zero calories. If the input is not a food, return 0.
 4.  **Explain**: You MUST provide a brief \`explanation\` for your analysis.
-5.  **Full Nutrition**: Fill out as many of the other nutritional fields (protein, fat, vitamins, etc.) as you can based on the identified food.
+5.  **Confidence Score**: You MUST provide a \`confidence\` score between 0 and 1, representing your confidence in the accuracy of the overall analysis.
+6.  **Full Nutrition**: Fill out as many of the other nutritional fields (protein, fat, vitamins, etc.) as you can based on the identified food.
 `
 });
 

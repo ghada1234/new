@@ -22,6 +22,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
 
 type AnalysisResultProps = {
   result: AnalyzeFoodImageOutput;
@@ -80,7 +81,14 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
           <CardTitle>{t('analysisResult')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <h3 className="font-semibold text-lg">{result.foodItems?.[0]?.name || t('identifiedMeal')}</h3>
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-lg">{result.foodItems?.[0]?.name || t('identifiedMeal')}</h3>
+            {result.confidence !== undefined && (
+              <Badge variant="outline">
+                {t('confidence')}: {(result.confidence * 100).toFixed(0)}%
+              </Badge>
+            )}
+          </div>
           
           <Accordion type="single" collapsible className="w-full" defaultValue="nutrition">
             {result.ingredients && result.ingredients.length > 0 && (
@@ -125,6 +133,12 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
                         <NutrientDisplay label={t('vitaminB9')} value={result.estimatedVitaminB9} unit={t('micrograms')} />
                         <NutrientDisplay label={t('vitaminB12')} value={result.estimatedVitaminB12} unit={t('micrograms')} />
                     </div>
+                </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="explanation">
+                <AccordionTrigger>{t('explanation')}</AccordionTrigger>
+                <AccordionContent>
+                    <p className="text-sm text-muted-foreground">{result.explanation}</p>
                 </AccordionContent>
             </AccordionItem>
           </Accordion>

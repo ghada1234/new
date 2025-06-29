@@ -151,5 +151,7 @@
   "selectImage": "Select Image",
   "clickToUpload": "Click to upload",
   "orDragAndDrop": "or drag and drop",
-  "supportedFormats": "PNG, JPG, or WEBP (MAX. 5MB)"
+  "supportedFormats": "PNG, JPG, or WEBP (MAX. 5MB)",
+  "confidence": "Confidence",
+  "explanation": "Explanation"
 }

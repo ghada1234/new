@@ -151,5 +151,7 @@
   "selectImage": "اختر صورة",
   "clickToUpload": "انقر للتحميل",
   "orDragAndDrop": "أو اسحب وأفلت",
-  "supportedFormats": "PNG, JPG, أو WEBP (بحد أقصى 5 ميجابايت)"
+  "supportedFormats": "PNG, JPG, أو WEBP (بحد أقصى 5 ميجابايت)",
+  "confidence": "درجة الثقة",
+  "explanation": "الشرح"
 }
