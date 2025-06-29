@@ -25,6 +25,8 @@ const prompt = ai.definePrompt({
   output: { schema: NutritionalInfoSchema },
   prompt: `You are a nutritional analysis AI with expertise in identifying a wide variety of international cuisines from images, including Middle Eastern and specifically Iraqi food. Your task is to analyze the provided image and return a detailed nutritional estimate.
 
+Your response MUST be a single, valid JSON object and nothing else. Do not include markdown formatting like \`\`\`json.
+
 Photo: {{media url=photoDataUri}}
 
 CRITICAL INSTRUCTIONS:

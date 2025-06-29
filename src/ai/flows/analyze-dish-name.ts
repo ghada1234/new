@@ -28,6 +28,8 @@ const prompt = ai.definePrompt({
   output: { schema: NutritionalInfoSchema },
   prompt: `You are a nutritional analysis AI with expertise in a wide variety of international cuisines, including Middle Eastern and specifically Iraqi food. Your task is to analyze the provided dish name, which can be in any language including Arabic, and return a detailed nutritional estimate.
 
+Your response MUST be a single, valid JSON object and nothing else. Do not include markdown formatting like \`\`\`json.
+
 Dish Name: {{{dishName}}}
 {{#if portionSize}}Portion Size: {{{portionSize}}}{{/if}}
 
