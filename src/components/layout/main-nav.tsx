@@ -4,6 +4,7 @@ import {
   Home,
   ScanLine,
   Lightbulb,
+  Info
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -20,6 +21,7 @@ const navItems = [
   { href: '/dashboard', labelKey: 'dashboard', icon: Home },
   { href: '/analyze', labelKey: 'analyzeMeal', icon: ScanLine },
   { href: '/suggestions', labelKey: 'aiMealSuggestions', icon: Lightbulb },
+  { href: '/about', labelKey: 'aboutMe', icon: Info },
 ] as const;
 
 export function MainNav() {
