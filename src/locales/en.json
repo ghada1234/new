@@ -153,5 +153,9 @@
   "orDragAndDrop": "or drag and drop",
   "supportedFormats": "PNG, JPG, or WEBP (MAX. 5MB)",
   "confidence": "Confidence",
-  "explanation": "Explanation"
+  "explanation": "Explanation",
+  "macroGoals": "Macronutrient Goals",
+  "targetProtein": "Target Protein (g)",
+  "targetCarbs": "Target Carbs (g)",
+  "targetFat": "Target Fat (g)"
 }

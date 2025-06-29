@@ -11,27 +11,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import {
-  Beef,
-  Wheat,
-  Droplets,
-} from 'lucide-react';
 import { useLocale } from '@/contexts/locale-context';
 import { NutrientDisplay } from '@/components/analysis/nutrient-display';
 import { usePreferences } from '@/contexts/preferences-context';
 import { Progress } from '@/components/ui/progress';
-
-const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
-    <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{title}</CardTitle>
-            <Icon className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-            <div className="text-2xl font-bold">{value}</div>
-        </CardContent>
-    </Card>
-);
+import { MacroProgressCard } from '@/components/dashboard/macro-progress-card';
 
 const CalorieProgressCard = ({ consumed, target }: { consumed: number; target: number }) => {
     const { t } = useLocale();
@@ -59,7 +43,7 @@ const CalorieProgressCard = ({ consumed, target }: { consumed: number; target: n
 export default function DashboardPage() {
   const { loggedMeals, isLoading: mealsLoading } = useLoggedMeals();
   const { t, locale } = useLocale();
-  const { targetCalories, isLoading: prefsLoading } = usePreferences();
+  const { preferences, isLoading: prefsLoading } = usePreferences();
   
   const todayMeals = useMemo(() => {
     const today = startOfDay(new Date());
@@ -149,11 +133,16 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-1 flex-col gap-4">
       <h1 className="font-headline text-2xl font-bold">{t('dashboardToday')}</h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <CalorieProgressCard consumed={dailyStats.totalCalories} target={targetCalories} />
-        <StatCard title={t('protein')} value={`${dailyStats.totalProtein.toFixed(0)} ${t('grams')}`} icon={Beef} />
-        <StatCard title={t('carbohydrates')} value={`${dailyStats.totalCarbs.toFixed(0)} ${t('grams')}`} icon={Wheat} />
-        <StatCard title={t('fat')} value={`${dailyStats.totalFat.toFixed(0)} ${t('grams')}`} icon={Droplets} />
+      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-4">
+        <CalorieProgressCard consumed={dailyStats.totalCalories} target={preferences.targetCalories} />
+        <MacroProgressCard 
+            consumedProtein={dailyStats.totalProtein}
+            targetProtein={preferences.targetProtein}
+            consumedCarbs={dailyStats.totalCarbs}
+            targetCarbs={preferences.targetCarbs}
+            consumedFat={dailyStats.totalFat}
+            targetFat={preferences.targetFat}
+        />
       </div>
       <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-5">
         <Card className="xl:col-span-3">

@@ -20,23 +20,44 @@ import { useEffect, useState } from 'react';
 export default function AccountPage() {
   const { user } = useAuth();
   const { t } = useLocale();
-  const { targetCalories, setTargetCalories } = usePreferences();
-  const [calories, setCalories] = useState(targetCalories.toString());
+  const { preferences, savePreferences } = usePreferences();
   const { toast } = useToast();
+  
+  const [goals, setGoals] = useState({
+      targetCalories: preferences.targetCalories.toString(),
+      targetProtein: preferences.targetProtein.toString(),
+      targetCarbs: preferences.targetCarbs.toString(),
+      targetFat: preferences.targetFat.toString(),
+  });
 
   useEffect(() => {
     // Update local state when the context value changes (e.g., on initial load)
-    setCalories(targetCalories.toString());
-  }, [targetCalories]);
+    setGoals({
+      targetCalories: preferences.targetCalories.toString(),
+      targetProtein: preferences.targetProtein.toString(),
+      targetCarbs: preferences.targetCarbs.toString(),
+      targetFat: preferences.targetFat.toString(),
+    });
+  }, [preferences]);
 
   if (!user) {
     return null;
   }
   
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setGoals(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleGoalsSaveChanges = () => {
-    const newTarget = parseInt(calories, 10);
-    if (!isNaN(newTarget) && newTarget > 0) {
-      setTargetCalories(newTarget);
+    const newGoals = {
+      targetCalories: parseInt(goals.targetCalories, 10),
+      targetProtein: parseInt(goals.targetProtein, 10),
+      targetCarbs: parseInt(goals.targetCarbs, 10),
+      targetFat: parseInt(goals.targetFat, 10),
+    };
+    if (Object.values(newGoals).every(v => !isNaN(v) && v >= 0)) {
+      savePreferences(newGoals);
       toast({
         title: t('saveSuccessTitle'),
         description: t('saveSuccessDescription'),
@@ -77,14 +98,47 @@ export default function AccountPage() {
           <CardDescription>{t('healthGoalsDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid gap-2">
-            <Label htmlFor="targetCalories">{t('targetDailyCalories')}</Label>
-            <Input
-              id="targetCalories"
-              type="number"
-              value={calories}
-              onChange={(e) => setCalories(e.target.value)}
-            />
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="targetCalories">{t('targetDailyCalories')}</Label>
+              <Input
+                id="targetCalories"
+                name="targetCalories"
+                type="number"
+                value={goals.targetCalories}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="targetProtein">{t('targetProtein')}</Label>
+              <Input
+                id="targetProtein"
+                name="targetProtein"
+                type="number"
+                value={goals.targetProtein}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="targetCarbs">{t('targetCarbs')}</Label>
+              <Input
+                id="targetCarbs"
+                name="targetCarbs"
+                type="number"
+                value={goals.targetCarbs}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="targetFat">{t('targetFat')}</Label>
+              <Input
+                id="targetFat"
+                name="targetFat"
+                type="number"
+                value={goals.targetFat}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
           <Button onClick={handleGoalsSaveChanges}>{t('saveChanges')}</Button>
         </CardContent>

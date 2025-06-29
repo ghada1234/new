@@ -1,3 +1,4 @@
+
 'use client';
 import React, {
   createContext,
@@ -7,9 +8,20 @@ import React, {
   type PropsWithChildren,
 } from 'react';
 
+const LOCAL_STORAGE_KEY = 'nutrisnap_preferences';
+
+const DEFAULT_PREFERENCES = {
+  targetCalories: 2000,
+  targetProtein: 100,
+  targetCarbs: 250,
+  targetFat: 70,
+};
+
+type Preferences = typeof DEFAULT_PREFERENCES;
+
 interface PreferencesContextType {
-  targetCalories: number;
-  setTargetCalories: (calories: number) => void;
+  preferences: Preferences;
+  savePreferences: (prefs: Preferences) => void;
   isLoading: boolean;
 }
 
@@ -17,19 +29,17 @@ const PreferencesContext = createContext<PreferencesContextType | undefined>(
   undefined
 );
 
-const LOCAL_STORAGE_KEY = 'nutrisnap_preferences';
-const DEFAULT_TARGET_CALORIES = 2000;
 
 export const PreferencesProvider = ({ children }: PropsWithChildren) => {
-  const [targetCalories, setTargetCaloriesState] = useState<number>(DEFAULT_TARGET_CALORIES);
+  const [preferences, setPreferencesState] = useState<Preferences>(DEFAULT_PREFERENCES);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     try {
       const item = window.localStorage.getItem(LOCAL_STORAGE_KEY);
       if (item) {
-        const preferences = JSON.parse(item);
-        setTargetCaloriesState(preferences.targetCalories || DEFAULT_TARGET_CALORIES);
+        const savedPrefs = JSON.parse(item);
+        setPreferencesState({ ...DEFAULT_PREFERENCES, ...savedPrefs});
       }
     } catch (error) {
       console.error('Failed to load preferences from localStorage', error);
@@ -37,11 +47,10 @@ export const PreferencesProvider = ({ children }: PropsWithChildren) => {
     setIsLoading(false);
   }, []);
 
-  const setTargetCalories = (calories: number) => {
+  const savePreferences = (newPrefs: Preferences) => {
       try {
-          const preferences = { targetCalories: calories };
-          window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(preferences));
-          setTargetCaloriesState(calories);
+          window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newPrefs));
+          setPreferencesState(newPrefs);
       } catch (error) {
           console.error('Failed to save preferences to localStorage', error);
       }
@@ -51,8 +60,8 @@ export const PreferencesProvider = ({ children }: PropsWithChildren) => {
   return (
     <PreferencesContext.Provider
       value={{
-        targetCalories,
-        setTargetCalories,
+        preferences,
+        savePreferences,
         isLoading,
       }}
     >
