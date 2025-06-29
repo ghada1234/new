@@ -14,6 +14,7 @@ import { useLocale } from '@/contexts/locale-context';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { cn } from '@/lib/utils';
 import { ThemeSwitcher } from '../theme-switcher';
+import { BottomNav } from './bottom-nav';
 
 export function AppShell({ children }: PropsWithChildren) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -62,7 +63,8 @@ export function AppShell({ children }: PropsWithChildren) {
             <UserMenu />
           </div>
         </Header>
-        <main className="flex-1 p-4 sm:px-6 sm:py-0 md:p-6">{children}</main>
+        <main className="flex-1 p-4 sm:px-6 sm:py-0 md:p-6 pb-20 md:pb-6">{children}</main>
+        <BottomNav />
       </div>
     </div>
   );
