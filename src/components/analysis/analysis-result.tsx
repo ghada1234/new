@@ -36,7 +36,7 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
 
   const handleLogMeal = () => {
     const mealData = {
-        name: result.foodItems[0]?.name || 'Analyzed Meal',
+        name: result.foodItems[0]?.name || 'وجبة محددة',
         calories: result.estimatedCalories || 0,
         protein: result.estimatedProtein || 0,
         carbs: result.estimatedCarbs || 0,
@@ -66,8 +66,8 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
     };
     addLoggedMeal(mealData);
     toast({
-        title: "Meal Logged",
-        description: `${mealData.name} has been added to your daily log.`,
+        title: "تم تسجيل الوجبة",
+        description: `تمت إضافة ${mealData.name} إلى سجلك اليومي.`,
     })
     onReset();
   };
@@ -76,36 +76,36 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
     <div className="w-full max-w-lg mx-auto space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>Analysis Result</CardTitle>
+          <CardTitle>نتيجة التحليل</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <h3 className="font-semibold text-lg">{result.foodItems[0]?.name || 'Identified Meal'}</h3>
+          <h3 className="font-semibold text-lg">{result.foodItems[0]?.name || 'الوجبة المحددة'}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
-            <NutrientDisplay label="Calories" value={result.estimatedCalories} unit="kcal" />
-            <NutrientDisplay label="Protein" value={result.estimatedProtein} unit="g" />
-            <NutrientDisplay label="Carbohydrates" value={result.estimatedCarbs} unit="g" />
-            <NutrientDisplay label="Fat" value={result.estimatedFat} unit="g" />
-            <NutrientDisplay label="Saturated Fat" value={result.estimatedSaturatedFat} unit="g" />
-            <NutrientDisplay label="Fiber" value={result.estimatedFiber} unit="g" />
-            <NutrientDisplay label="Sugar" value={result.estimatedSugar} unit="g" />
-            <NutrientDisplay label="Sodium" value={result.estimatedSodium} unit="mg" />
-            <NutrientDisplay label="Iron" value={result.estimatedIron} unit="mg" />
-            <NutrientDisplay label="Calcium" value={result.estimatedCalcium} unit="mg" />
-            <NutrientDisplay label="Magnesium" value={result.estimatedMagnesium} unit="mg" />
-            <NutrientDisplay label="Zinc" value={result.estimatedZinc} unit="mg" />
-            <NutrientDisplay label="Vitamin A" value={result.estimatedVitaminA} unit="µg" />
-            <NutrientDisplay label="Vitamin C" value={result.estimatedVitaminC} unit="mg" />
-            <NutrientDisplay label="Vitamin D" value={result.estimatedVitaminD} unit="µg" />
-            <NutrientDisplay label="Vitamin E" value={result.estimatedVitaminE} unit="mg" />
-            <NutrientDisplay label="Vitamin K" value={result.estimatedVitaminK} unit="µg" />
-            <NutrientDisplay label="Vitamin B1" value={result.estimatedVitaminB1} unit="mg" />
-            <NutrientDisplay label="Vitamin B2" value={result.estimatedVitaminB2} unit="mg" />
-            <NutrientDisplay label="Vitamin B3" value={result.estimatedVitaminB3} unit="mg" />
-            <NutrientDisplay label="Vitamin B5" value={result.estimatedVitaminB5} unit="mg" />
-            <NutrientDisplay label="Vitamin B6" value={result.estimatedVitaminB6} unit="mg" />
-            <NutrientDisplay label="Vitamin B7" value={result.estimatedVitaminB7} unit="µg" />
-            <NutrientDisplay label="Vitamin B9" value={result.estimatedVitaminB9} unit="µg" />
-            <NutrientDisplay label="Vitamin B12" value={result.estimatedVitaminB12} unit="µg" />
+            <NutrientDisplay label="السعرات الحرارية" value={result.estimatedCalories} unit="سعر حراري" />
+            <NutrientDisplay label="بروتين" value={result.estimatedProtein} unit="غ" />
+            <NutrientDisplay label="كربوهيدرات" value={result.estimatedCarbs} unit="غ" />
+            <NutrientDisplay label="دهون" value={result.estimatedFat} unit="غ" />
+            <NutrientDisplay label="الدهون المشبعة" value={result.estimatedSaturatedFat} unit="غ" />
+            <NutrientDisplay label="الألياف" value={result.estimatedFiber} unit="غ" />
+            <NutrientDisplay label="السكر" value={result.estimatedSugar} unit="غ" />
+            <NutrientDisplay label="صوديوم" value={result.estimatedSodium} unit="ملغ" />
+            <NutrientDisplay label="حديد" value={result.estimatedIron} unit="ملغ" />
+            <NutrientDisplay label="كالسيوم" value={result.estimatedCalcium} unit="ملغ" />
+            <NutrientDisplay label="مغنيسيوم" value={result.estimatedMagnesium} unit="ملغ" />
+            <NutrientDisplay label="زنك" value={result.estimatedZinc} unit="ملغ" />
+            <NutrientDisplay label="فيتامين أ" value={result.estimatedVitaminA} unit="مكغ" />
+            <NutrientDisplay label="فيتامين ج" value={result.estimatedVitaminC} unit="ملغ" />
+            <NutrientDisplay label="فيتامين د" value={result.estimatedVitaminD} unit="مكغ" />
+            <NutrientDisplay label="فيتامين هـ" value={result.estimatedVitaminE} unit="ملغ" />
+            <NutrientDisplay label="فيتامين ك" value={result.estimatedVitaminK} unit="مكغ" />
+            <NutrientDisplay label="فيتامين ب1" value={result.estimatedVitaminB1} unit="ملغ" />
+            <NutrientDisplay label="فيتامين ب2" value={result.estimatedVitaminB2} unit="ملغ" />
+            <NutrientDisplay label="فيتامين ب3" value={result.estimatedVitaminB3} unit="ملغ" />
+            <NutrientDisplay label="فيتامين ب5" value={result.estimatedVitaminB5} unit="ملغ" />
+            <NutrientDisplay label="فيتامين ب6" value={result.estimatedVitaminB6} unit="ملغ" />
+            <NutrientDisplay label="فيتامين ب7" value={result.estimatedVitaminB7} unit="مكغ" />
+            <NutrientDisplay label="فيتامين ب9" value={result.estimatedVitaminB9} unit="مكغ" />
+            <NutrientDisplay label="فيتامين ب12" value={result.estimatedVitaminB12} unit="مكغ" />
           </div>
         </CardContent>
       </Card>
@@ -115,21 +115,21 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
           onValueChange={(value: LoggedMeal['mealType']) => setMealType(value)}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Select meal type" />
+            <SelectValue placeholder="اختر نوع الوجبة" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="breakfast">Breakfast</SelectItem>
-            <SelectItem value="lunch">Lunch</SelectItem>
-            <SelectItem value="dinner">Dinner</SelectItem>
-            <SelectItem value="snack">Snack</SelectItem>
+            <SelectItem value="breakfast">فطور</SelectItem>
+            <SelectItem value="lunch">غداء</SelectItem>
+            <SelectItem value="dinner">عشاء</SelectItem>
+            <SelectItem value="snack">وجبة خفيفة</SelectItem>
           </SelectContent>
         </Select>
         <Button onClick={handleLogMeal} className="flex-grow">
-          Log Meal
+          تسجيل الوجبة
         </Button>
       </div>
       <Button onClick={onReset} variant="outline" className="w-full">
-        Analyze Another Meal
+        تحليل وجبة أخرى
       </Button>
     </div>
   );

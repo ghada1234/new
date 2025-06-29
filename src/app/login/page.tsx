@@ -53,16 +53,16 @@ export default function LoginPage() {
     try {
       await login(data.email, data.password);
       toast({
-        title: 'Login Successful',
-        description: 'Welcome back!',
+        title: 'تم تسجيل الدخول بنجاح',
+        description: 'مرحبا بعودتك!',
       });
       router.push('/dashboard');
     } catch (error) {
       console.error(error);
       toast({
-        title: 'Login Failed',
+        title: 'فشل تسجيل الدخول',
         description:
-          'Invalid email or password. Please check your credentials and try again.',
+          'بريد إلكتروني أو كلمة مرور غير صالحة. يرجى التحقق من بياناتك والمحاولة مرة أخرى.',
         variant: 'destructive',
       });
     } finally {
@@ -74,9 +74,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/40">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Login</CardTitle>
+          <CardTitle className="font-headline text-2xl">تسجيل الدخول</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            أدخل بريدك الإلكتروني أدناه لتسجيل الدخول إلى حسابك
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -87,7 +87,7 @@ export default function LoginPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>البريد الإلكتروني</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="m@example.com"
@@ -105,7 +105,7 @@ export default function LoginPage() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center">
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>كلمة المرور</FormLabel>
                     </div>
                     <FormControl>
                       <Input type="password" {...field} />
@@ -115,15 +115,15 @@ export default function LoginPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Login
+                {isLoading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
+                تسجيل الدخول
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
+            ليس لديك حساب؟{' '}
             <Link href="/register" className="underline">
-              Register
+              التسجيل
             </Link>
           </div>
         </CardContent>

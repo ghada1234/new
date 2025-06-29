@@ -15,9 +15,9 @@ import {
 } from '@/components/ui/tooltip';
 
 const navItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: Home },
-  { href: '/analyze', label: 'Analyze Meal', icon: ScanLine },
-  { href: '/suggestions', label: 'Meal Suggestions', icon: Lightbulb },
+  { href: '/dashboard', label: 'لوحة التحكم', icon: Home },
+  { href: '/analyze', label: 'تحليل وجبة', icon: ScanLine },
+  { href: '/suggestions', label: 'اقتراحات الوجبات', icon: Lightbulb },
 ];
 
 export function MainNav() {
@@ -40,7 +40,7 @@ export function MainNav() {
                 <span className="truncate">{label}</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right" sideOffset={5}>
+            <TooltipContent side="left" sideOffset={5}>
               {label}
             </TooltipContent>
           </Tooltip>

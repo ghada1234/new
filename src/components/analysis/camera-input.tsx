@@ -30,8 +30,8 @@ export function CameraInput() {
     } catch (err) {
       console.error('Error accessing camera:', err);
       toast({
-        title: "Camera Error",
-        description: "Could not access the camera. Please check permissions.",
+        title: "خطأ في الكاميرا",
+        description: "تعذر الوصول إلى الكاميرا. يرجى التحقق من الأذونات.",
         variant: "destructive",
       });
     }
@@ -70,8 +70,8 @@ export function CameraInput() {
       const result = await analyzeFoodImage({ photoDataUri: photo });
        if ((!result.foodItems || result.foodItems.length === 0) && (!result.estimatedCalories || result.estimatedCalories <= 0)) {
           toast({
-              title: "Could Not Identify Food",
-              description: "We couldn't find any food in the photo. Please try again with a clearer picture.",
+              title: "تعذر تحديد الطعام",
+              description: "لم نتمكن من العثور على أي طعام في الصورة. يرجى المحاولة مرة أخرى بصورة أوضح.",
               variant: "destructive"
           });
           setIsLoading(false);
@@ -81,8 +81,8 @@ export function CameraInput() {
     } catch (error) {
       console.error('Analysis failed:', error);
       toast({
-        title: "Analysis Failed",
-        description: "Could not analyze the photo. Please try again.",
+        title: "فشل التحليل",
+        description: "تعذر تحليل الصورة. يرجى المحاولة مرة أخرى.",
         variant: "destructive"
       });
     } finally {
@@ -117,26 +117,26 @@ export function CameraInput() {
       <div className="flex flex-wrap gap-2">
         {!photo && stream && (
           <Button onClick={takePhoto} size="lg">
-            <Camera className="mr-2 h-4 w-4" />
-            Take Photo
+            <Camera className="ml-2 h-4 w-4" />
+            التقط صورة
           </Button>
         )}
          {!photo && (
           <Button onClick={toggleCamera} variant="outline">
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Switch Camera
+            <RefreshCw className="ml-2 h-4 w-4" />
+            تبديل الكاميرا
           </Button>
         )}
         {photo && (
           <>
             <Button onClick={analyzePhoto} size="lg" disabled={isLoading} className="bg-accent hover:bg-accent/90">
               {isLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="ml-2 h-4 w-4 animate-spin" />
               ) : null}
-              Analyze Photo
+              تحليل الصورة
             </Button>
             <Button onClick={reset} variant="outline" disabled={isLoading}>
-              Retake
+              إعادة التقاط
             </Button>
           </>
         )}

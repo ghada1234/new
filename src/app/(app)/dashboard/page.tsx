@@ -51,11 +51,18 @@ export default function DashboardPage() {
   }, [todayMeals]);
 
   const chartData = [
-    { name: 'Breakfast', calories: todayMeals.filter(m => m.mealType === 'breakfast').reduce((sum, m) => sum + m.calories, 0) },
-    { name: 'Lunch', calories: todayMeals.filter(m => m.mealType === 'lunch').reduce((sum, m) => sum + m.calories, 0) },
-    { name: 'Dinner', calories: todayMeals.filter(m => m.mealType === 'dinner').reduce((sum, m) => sum + m.calories, 0) },
-    { name: 'Snacks', calories: todayMeals.filter(m => m.mealType === 'snack').reduce((sum, m) => sum + m.calories, 0) },
+    { name: 'فطور', calories: todayMeals.filter(m => m.mealType === 'breakfast').reduce((sum, m) => sum + m.calories, 0) },
+    { name: 'غداء', calories: todayMeals.filter(m => m.mealType === 'lunch').reduce((sum, m) => sum + m.calories, 0) },
+    { name: 'عشاء', calories: todayMeals.filter(m => m.mealType === 'dinner').reduce((sum, m) => sum + m.calories, 0) },
+    { name: 'وجبات خفيفة', calories: todayMeals.filter(m => m.mealType === 'snack').reduce((sum, m) => sum + m.calories, 0) },
   ];
+
+  const mealTypeTranslations = {
+      breakfast: 'فطور',
+      lunch: 'غداء',
+      dinner: 'عشاء',
+      snack: 'وجبة خفيفة'
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -63,24 +70,24 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <h1 className="font-headline text-2xl font-bold">Today's Dashboard</h1>
+      <h1 className="font-headline text-2xl font-bold">لوحة تحكم اليوم</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Total Calories" value={`${dailyStats.totalCalories.toFixed(0)} kcal`} icon={Flame} />
-        <StatCard title="Protein" value={`${dailyStats.totalProtein.toFixed(0)} g`} icon={Beef} />
-        <StatCard title="Carbohydrates" value={`${dailyStats.totalCarbs.toFixed(0)} g`} icon={Wheat} />
-        <StatCard title="Fat" value={`${dailyStats.totalFat.toFixed(0)} g`} icon={Droplets} />
+        <StatCard title="إجمالي السعرات الحرارية" value={`${dailyStats.totalCalories.toFixed(0)} سعر حراري`} icon={Flame} />
+        <StatCard title="بروتين" value={`${dailyStats.totalProtein.toFixed(0)} غ`} icon={Beef} />
+        <StatCard title="كربوهيدرات" value={`${dailyStats.totalCarbs.toFixed(0)} غ`} icon={Wheat} />
+        <StatCard title="دهون" value={`${dailyStats.totalFat.toFixed(0)} غ`} icon={Droplets} />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Calories by Meal Type</CardTitle>
+            <CardTitle>السعرات الحرارية حسب نوع الوجبة</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value} kcal`} />
+                <YAxis orientation="right" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value} سعر حراري`} />
                 <Tooltip />
                 <Bar dataKey="calories" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -89,9 +96,9 @@ export default function DashboardPage() {
         </Card>
         <Card className="col-span-4 lg:col-span-3">
           <CardHeader>
-            <CardTitle>Today's Meals</CardTitle>
+            <CardTitle>وجبات اليوم</CardTitle>
             <CardDescription>
-              You logged {todayMeals.length} meal(s) today.
+              لقد سجلت {todayMeals.length} وجبة (وجبات) اليوم.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -101,15 +108,15 @@ export default function DashboardPage() {
                   <div key={meal.id} className="flex items-center justify-between">
                     <div>
                       <p className="font-medium">{meal.name}</p>
-                      <p className="text-sm text-muted-foreground capitalize">{meal.mealType}</p>
+                      <p className="text-sm text-muted-foreground capitalize">{mealTypeTranslations[meal.mealType]}</p>
                     </div>
                     <div className="text-right">
-                       <p className="font-semibold">{meal.calories.toFixed(0)} kcal</p>
+                       <p className="font-semibold">{meal.calories.toFixed(0)} سعر حراري</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-center text-muted-foreground">No meals logged today.</p>
+                <p className="text-center text-muted-foreground">لم يتم تسجيل وجبات اليوم.</p>
               )}
             </div>
           </CardContent>

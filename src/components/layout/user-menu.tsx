@@ -63,18 +63,18 @@ export function UserMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/account">
-              <User className="mr-2 h-4 w-4" />
-              <span>Account</span>
+              <User className="ml-2 h-4 w-4" />
+              <span>الحساب</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <LifeBuoy className="mr-2 h-4 w-4" />
-            <span>Support</span>
+            <LifeBuoy className="ml-2 h-4 w-4" />
+            <span>الدعم</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={logout}>
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
+            <LogOut className="ml-2 h-4 w-4" />
+            <span>تسجيل الخروج</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

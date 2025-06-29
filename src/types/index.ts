@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters.'),
+  name: z.string().min(2, 'يجب أن يتكون الاسم من حرفين على الأقل.'),
   email: z.string().email(),
-  password: z.string().min(6, 'Password must be at least 6 characters.'),
+  password: z.string().min(6, 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.'),
 });
 
 export type RegisterData = z.infer<typeof registerSchema>;

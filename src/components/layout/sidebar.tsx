@@ -18,7 +18,7 @@ export const Sidebar = ({
     <>
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex',
+          'fixed inset-y-0 right-0 z-10 hidden w-14 flex-col border-l bg-background sm:flex',
           className
         )}
       >
@@ -34,8 +34,8 @@ export const Sidebar = ({
       />
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-30 flex h-full w-64 flex-col border-r bg-background transition-transform duration-300 ease-in-out md:hidden',
-          isOpen ? 'translate-x-0' : '-translate-x-full',
+          'fixed inset-y-0 right-0 z-30 flex h-full w-64 flex-col border-l bg-background transition-transform duration-300 ease-in-out md:hidden',
+          isOpen ? 'translate-x-0' : 'translate-x-full',
           className
         )}
       >

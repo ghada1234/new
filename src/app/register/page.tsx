@@ -46,15 +46,15 @@ export default function RegisterPage() {
     try {
       await register(data);
       toast({
-        title: 'Registration Successful',
-        description: 'Your account has been created.',
+        title: 'تم التسجيل بنجاح',
+        description: 'تم إنشاء حسابك.',
       });
       router.push('/dashboard');
     } catch (error) {
       console.error(error);
       toast({
-        title: 'Registration Failed',
-        description: 'Could not create your account. Please try again.',
+        title: 'فشل التسجيل',
+        description: 'تعذر إنشاء حسابك. يرجى المحاولة مرة أخرى.',
         variant: 'destructive',
       });
     } finally {
@@ -66,9 +66,9 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/40">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Register</CardTitle>
+          <CardTitle className="font-headline text-2xl">التسجيل</CardTitle>
           <CardDescription>
-            Create an account to start tracking your nutrition.
+            أنشئ حسابًا لبدء تتبع تغذيتك.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -79,9 +79,9 @@ export default function RegisterPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>الاسم</FormLabel>
                     <FormControl>
-                      <Input placeholder="Your Name" {...field} />
+                      <Input placeholder="اسمك" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -92,7 +92,7 @@ export default function RegisterPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>البريد الإلكتروني</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="m@example.com"
@@ -109,7 +109,7 @@ export default function RegisterPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>كلمة المرور</FormLabel>
                     <FormControl>
                       <Input type="password" {...field} />
                     </FormControl>
@@ -118,15 +118,15 @@ export default function RegisterPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Create Account
+                {isLoading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
+                إنشاء حساب
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
+            هل لديك حساب بالفعل؟{' '}
             <Link href="/login" className="underline">
-              Login
+              تسجيل الدخول
             </Link>
           </div>
         </CardContent>

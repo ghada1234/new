@@ -32,7 +32,7 @@ export function AppShell({ children }: PropsWithChildren) {
         </SidebarBody>
         <UserMenu />
       </Sidebar>
-      <div className="flex flex-1 flex-col sm:gap-4 sm:py-4 sm:pl-14">
+      <div className="flex flex-1 flex-col sm:gap-4 sm:py-4 sm:pr-14">
         <Header>
           <Button
             variant="ghost"

@@ -1,19 +1,13 @@
 import type { Metadata } from 'next';
-import { PT_Sans, Space_Grotesk } from 'next/font/google';
+import { Cairo } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/layout/providers';
 import { Toaster } from '@/components/ui/toaster';
 
-const ptSans = PT_Sans({
-  subsets: ['latin'],
+const cairo = Cairo({
+  subsets: ['arabic', 'latin'],
   weight: ['400', '700'],
-  variable: '--font-pt-sans',
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-space-grotesk',
+  variable: '--font-cairo',
 });
 
 export const metadata: Metadata = {
@@ -27,9 +21,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body
-        className={`${ptSans.variable} ${spaceGrotesk.variable} font-body antialiased`}
+        className={`${cairo.variable} font-body antialiased`}
       >
         <Providers>
           {children}

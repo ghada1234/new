@@ -21,12 +21,12 @@ export default function AccountPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <h1 className="font-headline text-2xl font-bold">Account</h1>
+      <h1 className="font-headline text-2xl font-bold">الحساب</h1>
       <Card>
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
+          <CardTitle>الملف الشخصي</CardTitle>
           <CardDescription>
-            This is how your profile appears to others.
+            هكذا يظهر ملفك الشخصي للآخرين.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -35,14 +35,14 @@ export default function AccountPage() {
             <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
           </Avatar>
           <div className="grid gap-2">
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="name">الاسم</Label>
             <Input id="name" defaultValue={user.displayName ?? ''} />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">البريد الإلكتروني</Label>
             <Input id="email" readOnly defaultValue={user.email ?? ''} />
           </div>
-          <Button>Save Changes</Button>
+          <Button>حفظ التغييرات</Button>
         </CardContent>
       </Card>
     </div>
