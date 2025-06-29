@@ -54,7 +54,7 @@ export default function RegisterPage() {
         title: t('registerSuccessTitle'),
         description: t('registerSuccessDescription'),
       });
-      router.push('/dashboard');
+      router.push('/home');
     } catch (error) {
       console.error(error);
       toast({

@@ -157,5 +157,10 @@
   "macroGoals": "Macronutrient Goals",
   "targetProtein": "Target Protein (g)",
   "targetCarbs": "Target Carbs (g)",
-  "targetFat": "Target Fat (g)"
+  "targetFat": "Target Fat (g)",
+  "home": "Home",
+  "welcomeBack": "Welcome back, {name}!",
+  "homeSubtitle": "Ready to track your nutrition for today?",
+  "todaysProgress": "Today's Progress",
+  "viewFullDashboard": "View Full Dashboard"
 }

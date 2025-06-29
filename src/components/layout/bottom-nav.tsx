@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { useLocale } from '@/contexts/locale-context';
 
 const navItems = [
-  { href: '/dashboard', labelKey: 'dashboard', icon: Home },
+  { href: '/home', labelKey: 'home', icon: Home },
   { href: '/analyze', labelKey: 'analyzeMeal', icon: ScanLine },
   { href: '/suggestions', labelKey: 'aiMealSuggestions', icon: Lightbulb },
 ];
@@ -21,7 +21,7 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-50 h-16 border-t bg-background md:hidden">
       <div className="grid h-full max-w-lg grid-cols-3 mx-auto">
         {navItems.map(({ href, labelKey, icon: Icon }) => {
-          const isActive = (href === '/dashboard' && pathname === href) || (href !== '/dashboard' && pathname.startsWith(href));
+          const isActive = (href === '/home' && pathname === href) || (href !== '/home' && pathname.startsWith(href));
           return (
             <Link
               key={href}

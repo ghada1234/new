@@ -1,3 +1,4 @@
+
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -16,7 +17,7 @@ export default function HomePage() {
   useEffect(() => {
     // If done loading and user exists, redirect to dashboard
     if (!loading && user) {
-      router.replace('/dashboard');
+      router.replace('/home');
     }
   }, [user, loading, router]);
 

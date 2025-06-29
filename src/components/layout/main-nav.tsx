@@ -4,7 +4,8 @@ import {
   Home,
   ScanLine,
   Lightbulb,
-  Info
+  Info,
+  LayoutDashboard
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -18,7 +19,8 @@ import {
 import { useLocale } from '@/contexts/locale-context';
 
 const navItems = [
-  { href: '/dashboard', labelKey: 'dashboard', icon: Home },
+  { href: '/home', labelKey: 'home', icon: Home },
+  { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
   { href: '/analyze', labelKey: 'analyzeMeal', icon: ScanLine },
   { href: '/suggestions', labelKey: 'aiMealSuggestions', icon: Lightbulb },
   { href: '/about', labelKey: 'aboutMe', icon: Info },
@@ -32,14 +34,16 @@ export function MainNav() {
   return (
     <nav className="flex flex-col items-start gap-2 px-2 text-sm font-medium">
       <TooltipProvider>
-        {navItems.map(({ href, labelKey, icon: Icon }) => (
+        {navItems.map(({ href, labelKey, icon: Icon }) => {
+          const isActive = (href === '/home' && pathname === href) || (href !== '/home' && pathname.startsWith(href));
+          return (
           <Tooltip key={href} delayDuration={0}>
             <TooltipTrigger asChild>
               <Link
                 href={href}
                 className={cn(
                   'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary',
-                  { 'bg-muted text-primary': pathname.startsWith(href) }
+                  { 'bg-muted text-primary': isActive }
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -50,7 +54,7 @@ export function MainNav() {
               {t(labelKey)}
             </TooltipContent>
           </Tooltip>
-        ))}
+        )})}
       </TooltipProvider>
     </nav>
   );

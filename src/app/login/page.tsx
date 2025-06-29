@@ -63,7 +63,7 @@ export default function LoginPage() {
         title: t('loginSuccessTitle'),
         description: t('loginSuccessDescription'),
       });
-      router.push('/dashboard');
+      router.push('/home');
     } catch (error) {
       console.error(error);
       toast({
@@ -84,7 +84,7 @@ export default function LoginPage() {
         title: t('loginSuccessTitle'),
         description: t('loginSuccessDescription'),
       });
-      router.push('/dashboard');
+      router.push('/home');
     } catch (error) {
       console.error(error);
       toast({
@@ -105,7 +105,7 @@ export default function LoginPage() {
         title: t('loginSuccessTitle'),
         description: t('loginSuccessDescription'),
       });
-      router.push('/dashboard');
+      router.push('/home');
     } catch (error) {
       console.error(error);
       toast({

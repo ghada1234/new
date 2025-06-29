@@ -157,5 +157,10 @@
   "macroGoals": "أهداف المغذيات الكبيرة",
   "targetProtein": "البروتين المستهدف (غ)",
   "targetCarbs": "الكربوهيدرات المستهدفة (غ)",
-  "targetFat": "الدهون المستهدفة (غ)"
+  "targetFat": "الدهون المستهدفة (غ)",
+  "home": "الرئيسية",
+  "welcomeBack": "أهلاً بعودتك، {name}!",
+  "homeSubtitle": "هل أنت مستعد لتتبع تغذيتك اليوم؟",
+  "todaysProgress": "تقدم اليوم",
+  "viewFullDashboard": "عرض لوحة التحكم الكاملة"
 }
