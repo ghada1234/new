@@ -1,4 +1,3 @@
-
 'use client';
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -71,18 +70,20 @@ export function CameraInput() {
     setAnalysisResult(null);
     try {
       const result = await analyzeFoodImage({ photoDataUri: photo });
-      const isWater = result?.foodItems?.some(item => item.name.toLowerCase().includes('water'));
+
+      const isWater = result.foodItems.some(item => item.name.toLowerCase().includes('water'));
       
-      // Robust check: if food is identified, calories must be positive (unless it's water).
-      if (!result || !result.foodItems || result.foodItems.length === 0 || ((!result.estimatedCalories || result.estimatedCalories <= 0) && !isWater)) {
+      // The AI should return > 0 calories for food. If not, we consider it a failure to identify.
+      // This also handles cases where non-food items are correctly identified with 0 calories.
+      if (result.estimatedCalories <= 0 && !isWater) {
           toast({
               title: t('couldNotIdentifyFood'),
               description: t('couldNotIdentifyFoodInImage'),
               variant: "destructive"
           });
-          setIsLoading(false);
           return;
       }
+
       setAnalysisResult(result);
     } catch (error) {
       console.error('Analysis failed:', error);
