@@ -28,6 +28,15 @@ export function DishNameInput() {
     setAnalysisResult(null);
     try {
       const result = await analyzeDishName({ dishName, portionSize });
+      if ((!result.foodItems || result.foodItems.length === 0) && (!result.estimatedCalories || result.estimatedCalories <= 0)) {
+          toast({
+              title: "Could Not Identify Food",
+              description: `We couldn't identify "${dishName}" as a food item. Please try a different name.`,
+              variant: "destructive"
+          });
+          setIsLoading(false);
+          return;
+      }
       setAnalysisResult(result);
     } catch (error) {
       console.error('Analysis failed:', error);

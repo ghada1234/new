@@ -68,6 +68,15 @@ export function CameraInput() {
     setAnalysisResult(null);
     try {
       const result = await analyzeFoodImage({ photoDataUri: photo });
+       if ((!result.foodItems || result.foodItems.length === 0) && (!result.estimatedCalories || result.estimatedCalories <= 0)) {
+          toast({
+              title: "Could Not Identify Food",
+              description: "We couldn't find any food in the photo. Please try again with a clearer picture.",
+              variant: "destructive"
+          });
+          setIsLoading(false);
+          return;
+      }
       setAnalysisResult(result);
     } catch (error) {
       console.error('Analysis failed:', error);

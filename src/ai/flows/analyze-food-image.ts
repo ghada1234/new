@@ -30,9 +30,9 @@ Photo: {{media url=photoDataUri}}
 
 CRITICAL RULES:
 1. Your entire response MUST be only the JSON object. Do not include any other text, explanations, or markdown formatting like \`\`\`json.
-2. If the image does not contain food, or you cannot identify any food, you MUST return a JSON object with an empty "foodItems" array and all nutritional values as 0 or omitted, e.g., '{"foodItems": [], "estimatedCalories": 0}'.
-3. For any recognizable food, you MUST provide an "estimatedCalories" value greater than 0. Do not return 0 calories for an actual food item.
-4. If you cannot estimate a specific nutrient, omit its key from the JSON object instead of providing a value of 0. The only exception is 'estimatedCalories', which must be present for recognizable food.`,
+2. If the image contains what appears to be food, you MUST identify it. This means the "foodItems" array must not be empty, and "estimatedCalories" MUST be a number greater than 0.
+3. You should only return an empty "foodItems" array and 0 calories if the image unambiguously contains NO food items.
+4. If you cannot estimate a specific nutrient for a food item, omit that nutrient's key from the JSON object. Do not use a value of 0, except for "estimatedCalories" in the case of non-food items as described in rule 3.`,
 });
 
 const analyzeFoodImageFlow = ai.defineFlow(
@@ -46,9 +46,9 @@ const analyzeFoodImageFlow = ai.defineFlow(
     if (!output) {
       throw new Error('Analysis failed: AI returned no output.');
     }
-    // Basic validation to prevent "zero calorie" issue
-    if (output.foodItems && output.foodItems.length > 0 && output.estimatedCalories === 0) {
-        throw new Error('Analysis failed: AI returned zero calories for an identified food item.');
+    // Better validation to prevent "zero calorie" issue for identified foods.
+    if (output.foodItems && output.foodItems.length > 0 && (!output.estimatedCalories || output.estimatedCalories <= 0)) {
+        throw new Error('Analysis failed: AI returned zero or no calories for an identified food item.');
     }
     return output;
   }
