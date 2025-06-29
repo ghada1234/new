@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { suggestMeals, type SuggestMealsOutput } from '@/ai/flows/suggest-meals';
@@ -13,8 +14,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useLocale } from '@/contexts/locale-context';
 
 function SuggestionCard({ suggestion }: { suggestion: SuggestMealsOutput[0] }) {
+    const { t } = useLocale();
     return (
         <Card>
             <CardHeader>
@@ -22,11 +25,11 @@ function SuggestionCard({ suggestion }: { suggestion: SuggestMealsOutput[0] }) {
             </CardHeader>
             <CardContent className="space-y-4">
                 <div>
-                    <h4 className="font-semibold">المكونات</h4>
+                    <h4 className="font-semibold">{t('ingredients')}</h4>
                     <p className="text-sm text-muted-foreground whitespace-pre-wrap">{suggestion.ingredients}</p>
                 </div>
                 <div>
-                    <h4 className="font-semibold">التعليمات</h4>
+                    <h4 className="font-semibold">{t('instructions')}</h4>
                     <p className="text-sm text-muted-foreground whitespace-pre-wrap">{suggestion.instructions}</p>
                 </div>
             </CardContent>
@@ -46,6 +49,7 @@ export default function SuggestionsPage() {
   );
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useLocale();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,8 +69,8 @@ export default function SuggestionsPage() {
     } catch (error) {
       console.error(error);
       toast({
-        title: "فشل الاقتراح",
-        description: "تعذر الحصول على اقتراحات وجبات. يرجى المحاولة مرة أخرى.",
+        title: t('suggestionFetchErrorTitle'),
+        description: t('suggestionFetchErrorDescription'),
         variant: "destructive"
       });
     } finally {
@@ -76,46 +80,46 @@ export default function SuggestionsPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <h1 className="font-headline text-2xl font-bold">اقتراحات وجبات بالذكاء الاصطناعي</h1>
+      <h1 className="font-headline text-2xl font-bold">{t('aiMealSuggestions')}</h1>
       <p className="text-muted-foreground">
-        احصل على أفكار لوجبات بناءً على احتياجاتك وتفضيلاتك الغذائية.
+        {t('aiMealSuggestionsDescription')}
       </p>
 
       <Card>
         <CardHeader>
-          <CardTitle>تفضيلاتك</CardTitle>
+          <CardTitle>{t('yourPreferences')}</CardTitle>
           <CardDescription>
-            أخبرنا قليلاً عما تبحث عنه.
+            {t('yourPreferencesDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-3">
           <div className="grid gap-2">
-            <Label htmlFor="dietaryRestrictions">قيود غذائية</Label>
+            <Label htmlFor="dietaryRestrictions">{t('dietaryRestrictions')}</Label>
             <Input
               id="dietaryRestrictions"
               name="dietaryRestrictions"
-              placeholder="مثال: نباتي، خالي من الغلوتين"
+              placeholder={t('dietaryRestrictionsPlaceholder')}
               value={preferences.dietaryRestrictions}
               onChange={handleInputChange}
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="allergies">الحساسية</Label>
+            <Label htmlFor="allergies">{t('allergies')}</Label>
             <Input
               id="allergies"
               name="allergies"
-              placeholder="مثال: فول سوداني، ألبان"
+              placeholder={t('allergiesPlaceholder')}
               value={preferences.allergies}
               onChange={handleInputChange}
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="caloricIntake">السعرات الحرارية اليومية المستهدفة</Label>
+            <Label htmlFor="caloricIntake">{t('targetDailyCalories')}</Label>
             <Input
               id="caloricIntake"
               name="caloricIntake"
               type="number"
-              placeholder="مثال: 2000"
+              placeholder={t('targetDailyCaloriesPlaceholder')}
               value={preferences.caloricIntake}
               onChange={handleInputChange}
             />
@@ -124,13 +128,13 @@ export default function SuggestionsPage() {
       </Card>
       
       <Button onClick={getSuggestions} disabled={isLoading} className="w-full md:w-auto">
-        {isLoading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
-        الحصول على اقتراحات
+        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {t('getSuggestions')}
       </Button>
 
       {suggestions && (
         <div className="mt-6 space-y-4">
-            <h2 className="font-headline text-xl font-bold">إليك اقتراحاتك:</h2>
+            <h2 className="font-headline text-xl font-bold">{t('hereAreYourSuggestions')}</h2>
             <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
                 {suggestions.map((suggestion, index) => (
                     <SuggestionCard key={index} suggestion={suggestion} />

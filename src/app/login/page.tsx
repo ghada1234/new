@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,6 +27,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { useLocale } from '@/contexts/locale-context';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -39,6 +41,7 @@ export default function LoginPage() {
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLocale();
 
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -53,16 +56,15 @@ export default function LoginPage() {
     try {
       await login(data.email, data.password);
       toast({
-        title: 'تم تسجيل الدخول بنجاح',
-        description: 'مرحبا بعودتك!',
+        title: t('loginSuccessTitle'),
+        description: t('loginSuccessDescription'),
       });
       router.push('/dashboard');
     } catch (error) {
       console.error(error);
       toast({
-        title: 'فشل تسجيل الدخول',
-        description:
-          'بريد إلكتروني أو كلمة مرور غير صالحة. يرجى التحقق من بياناتك والمحاولة مرة أخرى.',
+        title: t('loginErrorTitle'),
+        description: t('loginErrorDescription'),
         variant: 'destructive',
       });
     } finally {
@@ -74,9 +76,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/40">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">تسجيل الدخول</CardTitle>
+          <CardTitle className="font-headline text-2xl">{t('login')}</CardTitle>
           <CardDescription>
-            أدخل بريدك الإلكتروني أدناه لتسجيل الدخول إلى حسابك
+            {t('loginDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -87,7 +89,7 @@ export default function LoginPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>البريد الإلكتروني</FormLabel>
+                    <FormLabel>{t('email')}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="m@example.com"
@@ -105,7 +107,7 @@ export default function LoginPage() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex items-center">
-                      <FormLabel>كلمة المرور</FormLabel>
+                      <FormLabel>{t('password')}</FormLabel>
                     </div>
                     <FormControl>
                       <Input type="password" {...field} />
@@ -115,15 +117,15 @@ export default function LoginPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
-                تسجيل الدخول
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('login')}
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            ليس لديك حساب؟{' '}
+            {t('noAccount')}{' '}
             <Link href="/register" className="underline">
-              التسجيل
+              {t('registerLink')}
             </Link>
           </div>
         </CardContent>

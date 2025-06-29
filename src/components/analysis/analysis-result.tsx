@@ -1,3 +1,4 @@
+
 'use client';
 import type { AnalyzeFoodImageOutput } from '@/ai/flows/analyze-food-image';
 import { useLoggedMeals } from '@/contexts/logged-meal-context';
@@ -13,6 +14,7 @@ import {
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { LoggedMeal } from '@/types';
+import { useLocale } from '@/contexts/locale-context';
 
 type AnalysisResultProps = {
   result: AnalyzeFoodImageOutput;
@@ -33,10 +35,12 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
   const [mealType, setMealType] = useState<LoggedMeal['mealType']>('lunch');
   const { addLoggedMeal } = useLoggedMeals();
   const { toast } = useToast();
+  const { t } = useLocale();
 
   const handleLogMeal = () => {
+    const mealName = result.foodItems?.[0]?.name || t('identifiedMeal');
     const mealData = {
-        name: result.foodItems[0]?.name || 'وجبة محددة',
+        name: mealName,
         calories: result.estimatedCalories || 0,
         protein: result.estimatedProtein || 0,
         carbs: result.estimatedCarbs || 0,
@@ -66,8 +70,8 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
     };
     addLoggedMeal(mealData);
     toast({
-        title: "تم تسجيل الوجبة",
-        description: `تمت إضافة ${mealData.name} إلى سجلك اليومي.`,
+        title: t('mealLoggedTitle'),
+        description: t('mealLoggedDescription', { mealName: mealData.name }),
     })
     onReset();
   };
@@ -76,36 +80,36 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
     <div className="w-full max-w-lg mx-auto space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>نتيجة التحليل</CardTitle>
+          <CardTitle>{t('analysisResult')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <h3 className="font-semibold text-lg">{result.foodItems[0]?.name || 'الوجبة المحددة'}</h3>
+          <h3 className="font-semibold text-lg">{result.foodItems?.[0]?.name || t('identifiedMeal')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
-            <NutrientDisplay label="السعرات الحرارية" value={result.estimatedCalories} unit="سعر حراري" />
-            <NutrientDisplay label="بروتين" value={result.estimatedProtein} unit="غ" />
-            <NutrientDisplay label="كربوهيدرات" value={result.estimatedCarbs} unit="غ" />
-            <NutrientDisplay label="دهون" value={result.estimatedFat} unit="غ" />
-            <NutrientDisplay label="الدهون المشبعة" value={result.estimatedSaturatedFat} unit="غ" />
-            <NutrientDisplay label="الألياف" value={result.estimatedFiber} unit="غ" />
-            <NutrientDisplay label="السكر" value={result.estimatedSugar} unit="غ" />
-            <NutrientDisplay label="صوديوم" value={result.estimatedSodium} unit="ملغ" />
-            <NutrientDisplay label="حديد" value={result.estimatedIron} unit="ملغ" />
-            <NutrientDisplay label="كالسيوم" value={result.estimatedCalcium} unit="ملغ" />
-            <NutrientDisplay label="مغنيسيوم" value={result.estimatedMagnesium} unit="ملغ" />
-            <NutrientDisplay label="زنك" value={result.estimatedZinc} unit="ملغ" />
-            <NutrientDisplay label="فيتامين أ" value={result.estimatedVitaminA} unit="مكغ" />
-            <NutrientDisplay label="فيتامين ج" value={result.estimatedVitaminC} unit="ملغ" />
-            <NutrientDisplay label="فيتامين د" value={result.estimatedVitaminD} unit="مكغ" />
-            <NutrientDisplay label="فيتامين هـ" value={result.estimatedVitaminE} unit="ملغ" />
-            <NutrientDisplay label="فيتامين ك" value={result.estimatedVitaminK} unit="مكغ" />
-            <NutrientDisplay label="فيتامين ب1" value={result.estimatedVitaminB1} unit="ملغ" />
-            <NutrientDisplay label="فيتامين ب2" value={result.estimatedVitaminB2} unit="ملغ" />
-            <NutrientDisplay label="فيتامين ب3" value={result.estimatedVitaminB3} unit="ملغ" />
-            <NutrientDisplay label="فيتامين ب5" value={result.estimatedVitaminB5} unit="ملغ" />
-            <NutrientDisplay label="فيتامين ب6" value={result.estimatedVitaminB6} unit="ملغ" />
-            <NutrientDisplay label="فيتامين ب7" value={result.estimatedVitaminB7} unit="مكغ" />
-            <NutrientDisplay label="فيتامين ب9" value={result.estimatedVitaminB9} unit="مكغ" />
-            <NutrientDisplay label="فيتامين ب12" value={result.estimatedVitaminB12} unit="مكغ" />
+            <NutrientDisplay label={t('totalCalories')} value={result.estimatedCalories} unit={t('caloriesUnit')} />
+            <NutrientDisplay label={t('protein')} value={result.estimatedProtein} unit={t('grams')} />
+            <NutrientDisplay label={t('carbohydrates')} value={result.estimatedCarbs} unit={t('grams')} />
+            <NutrientDisplay label={t('fat')} value={result.estimatedFat} unit={t('grams')} />
+            <NutrientDisplay label={t('saturatedFat')} value={result.estimatedSaturatedFat} unit={t('grams')} />
+            <NutrientDisplay label={t('fiber')} value={result.estimatedFiber} unit={t('grams')} />
+            <NutrientDisplay label={t('sugar')} value={result.estimatedSugar} unit={t('grams')} />
+            <NutrientDisplay label={t('sodium')} value={result.estimatedSodium} unit={t('milligrams')} />
+            <NutrientDisplay label={t('iron')} value={result.estimatedIron} unit={t('milligrams')} />
+            <NutrientDisplay label={t('calcium')} value={result.estimatedCalcium} unit={t('milligrams')} />
+            <NutrientDisplay label={t('magnesium')} value={result.estimatedMagnesium} unit={t('milligrams')} />
+            <NutrientDisplay label={t('zinc')} value={result.estimatedZinc} unit={t('milligrams')} />
+            <NutrientDisplay label={t('vitaminA')} value={result.estimatedVitaminA} unit={t('micrograms')} />
+            <NutrientDisplay label={t('vitaminC')} value={result.estimatedVitaminC} unit={t('milligrams')} />
+            <NutrientDisplay label={t('vitaminD')} value={result.estimatedVitaminD} unit={t('micrograms')} />
+            <NutrientDisplay label={t('vitaminE')} value={result.estimatedVitaminE} unit={t('milligrams')} />
+            <NutrientDisplay label={t('vitaminK')} value={result.estimatedVitaminK} unit={t('micrograms')} />
+            <NutrientDisplay label={t('vitaminB1')} value={result.estimatedVitaminB1} unit={t('milligrams')} />
+            <NutrientDisplay label={t('vitaminB2')} value={result.estimatedVitaminB2} unit={t('milligrams')} />
+            <NutrientDisplay label={t('vitaminB3')} value={result.estimatedVitaminB3} unit={t('milligrams')} />
+            <NutrientDisplay label={t('vitaminB5')} value={result.estimatedVitaminB5} unit={t('milligrams')} />
+            <NutrientDisplay label={t('vitaminB6')} value={result.estimatedVitaminB6} unit={t('milligrams')} />
+            <NutrientDisplay label={t('vitaminB7')} value={result.estimatedVitaminB7} unit={t('micrograms')} />
+            <NutrientDisplay label={t('vitaminB9')} value={result.estimatedVitaminB9} unit={t('micrograms')} />
+            <NutrientDisplay label={t('vitaminB12')} value={result.estimatedVitaminB12} unit={t('micrograms')} />
           </div>
         </CardContent>
       </Card>
@@ -115,21 +119,21 @@ export function AnalysisResult({ result, onReset }: AnalysisResultProps) {
           onValueChange={(value: LoggedMeal['mealType']) => setMealType(value)}
         >
           <SelectTrigger>
-            <SelectValue placeholder="اختر نوع الوجبة" />
+            <SelectValue placeholder={t('chooseMealType')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="breakfast">فطور</SelectItem>
-            <SelectItem value="lunch">غداء</SelectItem>
-            <SelectItem value="dinner">عشاء</SelectItem>
-            <SelectItem value="snack">وجبة خفيفة</SelectItem>
+            <SelectItem value="breakfast">{t('breakfast')}</SelectItem>
+            <SelectItem value="lunch">{t('lunch')}</SelectItem>
+            <SelectItem value="dinner">{t('dinner')}</SelectItem>
+            <SelectItem value="snack">{t('snack')}</SelectItem>
           </SelectContent>
         </Select>
         <Button onClick={handleLogMeal} className="flex-grow">
-          تسجيل الوجبة
+          {t('logMeal')}
         </Button>
       </div>
       <Button onClick={onReset} variant="outline" className="w-full">
-        تحليل وجبة أخرى
+        {t('analyzeAnotherMeal')}
       </Button>
     </div>
   );

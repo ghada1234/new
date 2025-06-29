@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,14 +24,18 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
-import { registerSchema, type RegisterData } from '@/types';
+import { useState, useMemo } from 'react';
+import { getRegisterSchema, type RegisterData } from '@/types';
+import { useLocale } from '@/contexts/locale-context';
 
 export default function RegisterPage() {
   const { register } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLocale();
+
+  const registerSchema = useMemo(() => getRegisterSchema(t as any), [t]);
 
   const form = useForm<RegisterData>({
     resolver: zodResolver(registerSchema),
@@ -46,15 +51,15 @@ export default function RegisterPage() {
     try {
       await register(data);
       toast({
-        title: 'تم التسجيل بنجاح',
-        description: 'تم إنشاء حسابك.',
+        title: t('registerSuccessTitle'),
+        description: t('registerSuccessDescription'),
       });
       router.push('/dashboard');
     } catch (error) {
       console.error(error);
       toast({
-        title: 'فشل التسجيل',
-        description: 'تعذر إنشاء حسابك. يرجى المحاولة مرة أخرى.',
+        title: t('registerErrorTitle'),
+        description: t('registerErrorDescription'),
         variant: 'destructive',
       });
     } finally {
@@ -66,9 +71,9 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/40">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">التسجيل</CardTitle>
+          <CardTitle className="font-headline text-2xl">{t('register')}</CardTitle>
           <CardDescription>
-            أنشئ حسابًا لبدء تتبع تغذيتك.
+            {t('registerDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -79,9 +84,9 @@ export default function RegisterPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>الاسم</FormLabel>
+                    <FormLabel>{t('name')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="اسمك" {...field} />
+                      <Input placeholder={t('name')} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -92,7 +97,7 @@ export default function RegisterPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>البريد الإلكتروني</FormLabel>
+                    <FormLabel>{t('email')}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="m@example.com"
@@ -109,7 +114,7 @@ export default function RegisterPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>كلمة المرور</FormLabel>
+                    <FormLabel>{t('password')}</FormLabel>
                     <FormControl>
                       <Input type="password" {...field} />
                     </FormControl>
@@ -118,15 +123,15 @@ export default function RegisterPage() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
-                إنشاء حساب
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('createAccount')}
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            هل لديك حساب بالفعل؟{' '}
+            {t('haveAccount')}{' '}
             <Link href="/login" className="underline">
-              تسجيل الدخول
+              {t('loginLink')}
             </Link>
           </div>
         </CardContent>

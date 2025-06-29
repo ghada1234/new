@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useLocale } from '@/contexts/locale-context';
 
 export function DishNameInput() {
   const [dishName, setDishName] = useState('');
@@ -21,6 +23,7 @@ export function DishNameInput() {
   const [isLoading, setIsLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalyzeDishNameOutput | null>(null);
   const { toast } = useToast();
+  const { t } = useLocale();
 
   const handleAnalysis = async () => {
     if (!dishName) return;
@@ -30,8 +33,8 @@ export function DishNameInput() {
       const result = await analyzeDishName({ dishName, portionSize });
       if ((!result.foodItems || result.foodItems.length === 0) && (!result.estimatedCalories || result.estimatedCalories <= 0)) {
           toast({
-              title: "تعذر تحديد الطعام",
-              description: `لم نتمكن من تحديد "${dishName}" كعنصر غذائي. يرجى تجربة اسم مختلف.`,
+              title: t('couldNotIdentifyFood'),
+              description: t('couldNotIdentifyFoodByName', { dishName }),
               variant: "destructive"
           });
           setIsLoading(false);
@@ -41,8 +44,8 @@ export function DishNameInput() {
     } catch (error) {
       console.error('Analysis failed:', error);
       toast({
-        title: "فشل التحليل",
-        description: "تعذر تحليل اسم الطبق. يرجى المحاولة مرة أخرى.",
+        title: t('analysisFailedTitle'),
+        description: t('dishNameAnalysisFailed'),
         variant: "destructive"
       });
     } finally {
@@ -63,31 +66,31 @@ export function DishNameInput() {
   return (
     <Card className="w-full max-w-lg mx-auto">
         <CardHeader>
-            <CardTitle>تحليل حسب اسم الطبق</CardTitle>
-            <CardDescription>أدخل اسم طبقك وحجم الحصة اختياريًا.</CardDescription>
+            <CardTitle>{t('analyzeByDishName')}</CardTitle>
+            <CardDescription>{t('analyzeByDishNameDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
             <div className="grid gap-2">
-                <Label htmlFor="dishName">اسم الطبق</Label>
+                <Label htmlFor="dishName">{t('dishName')}</Label>
                 <Input
                     id="dishName"
                     value={dishName}
                     onChange={(e) => setDishName(e.target.value)}
-                    placeholder="مثال: سباغيتي كاربونارا"
+                    placeholder="e.g., Spaghetti Carbonara"
                 />
             </div>
             <div className="grid gap-2">
-                <Label htmlFor="portionSize">حجم الحصة (اختياري)</Label>
+                <Label htmlFor="portionSize">{t('portionSizeOptional')}</Label>
                 <Input
                     id="portionSize"
                     value={portionSize}
                     onChange={(e) => setPortionSize(e.target.value)}
-                    placeholder="مثال: وعاء واحد، 200 جرام"
+                    placeholder={t('portionSizePlaceholder')}
                 />
             </div>
             <Button onClick={handleAnalysis} disabled={isLoading || !dishName}>
-                {isLoading && <Loader2 className="ml-2 h-4 w-4 animate-spin" />}
-                تحليل الطبق
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t('analyzeDish')}
             </Button>
         </CardContent>
     </Card>

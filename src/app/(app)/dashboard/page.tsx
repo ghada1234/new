@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useMemo } from 'react';
 import { useLoggedMeals } from '@/contexts/logged-meal-context';
@@ -16,6 +17,7 @@ import {
   Wheat,
   Droplets,
 } from 'lucide-react';
+import { useLocale } from '@/contexts/locale-context';
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
     <Card>
@@ -31,6 +33,7 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, 
 
 export default function DashboardPage() {
   const { loggedMeals, isLoading } = useLoggedMeals();
+  const { t, locale } = useLocale();
   
   const todayMeals = useMemo(() => {
     const today = startOfDay(new Date());
@@ -51,17 +54,17 @@ export default function DashboardPage() {
   }, [todayMeals]);
 
   const chartData = [
-    { name: 'فطور', calories: todayMeals.filter(m => m.mealType === 'breakfast').reduce((sum, m) => sum + m.calories, 0) },
-    { name: 'غداء', calories: todayMeals.filter(m => m.mealType === 'lunch').reduce((sum, m) => sum + m.calories, 0) },
-    { name: 'عشاء', calories: todayMeals.filter(m => m.mealType === 'dinner').reduce((sum, m) => sum + m.calories, 0) },
-    { name: 'وجبات خفيفة', calories: todayMeals.filter(m => m.mealType === 'snack').reduce((sum, m) => sum + m.calories, 0) },
+    { name: t('breakfast'), calories: todayMeals.filter(m => m.mealType === 'breakfast').reduce((sum, m) => sum + m.calories, 0) },
+    { name: t('lunch'), calories: todayMeals.filter(m => m.mealType === 'lunch').reduce((sum, m) => sum + m.calories, 0) },
+    { name: t('dinner'), calories: todayMeals.filter(m => m.mealType === 'dinner').reduce((sum, m) => sum + m.calories, 0) },
+    { name: t('snack'), calories: todayMeals.filter(m => m.mealType === 'snack').reduce((sum, m) => sum + m.calories, 0) },
   ];
 
   const mealTypeTranslations = {
-      breakfast: 'فطور',
-      lunch: 'غداء',
-      dinner: 'عشاء',
-      snack: 'وجبة خفيفة'
+      breakfast: t('breakfast'),
+      lunch: t('lunch'),
+      dinner: t('dinner'),
+      snack: t('snack')
   }
 
   if (isLoading) {
@@ -70,24 +73,24 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <h1 className="font-headline text-2xl font-bold">لوحة تحكم اليوم</h1>
+      <h1 className="font-headline text-2xl font-bold">{t('dashboardToday')}</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="إجمالي السعرات الحرارية" value={`${dailyStats.totalCalories.toFixed(0)} سعر حراري`} icon={Flame} />
-        <StatCard title="بروتين" value={`${dailyStats.totalProtein.toFixed(0)} غ`} icon={Beef} />
-        <StatCard title="كربوهيدرات" value={`${dailyStats.totalCarbs.toFixed(0)} غ`} icon={Wheat} />
-        <StatCard title="دهون" value={`${dailyStats.totalFat.toFixed(0)} غ`} icon={Droplets} />
+        <StatCard title={t('totalCalories')} value={`${dailyStats.totalCalories.toFixed(0)} ${t('calories')}`} icon={Flame} />
+        <StatCard title={t('protein')} value={`${dailyStats.totalProtein.toFixed(0)} ${t('grams')}`} icon={Beef} />
+        <StatCard title={t('carbohydrates')} value={`${dailyStats.totalCarbs.toFixed(0)} ${t('grams')}`} icon={Wheat} />
+        <StatCard title={t('fat')} value={`${dailyStats.totalFat.toFixed(0)} ${t('grams')}`} icon={Droplets} />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>السعرات الحرارية حسب نوع الوجبة</CardTitle>
+            <CardTitle>{t('caloriesByMealType')}</CardTitle>
           </CardHeader>
-          <CardContent className="pl-2">
+          <CardContent className={locale === 'ar' ? 'pr-2' : 'pl-2'}>
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis orientation="right" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value} سعر حراري`} />
+                <YAxis orientation={locale === 'ar' ? "right" : "left"} stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value} ${t('calories')}`} />
                 <Tooltip />
                 <Bar dataKey="calories" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -96,9 +99,9 @@ export default function DashboardPage() {
         </Card>
         <Card className="col-span-4 lg:col-span-3">
           <CardHeader>
-            <CardTitle>وجبات اليوم</CardTitle>
+            <CardTitle>{t('todaysMeals')}</CardTitle>
             <CardDescription>
-              لقد سجلت {todayMeals.length} وجبة (وجبات) اليوم.
+              {t('mealsLoggedToday', { count: todayMeals.length })}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -110,13 +113,13 @@ export default function DashboardPage() {
                       <p className="font-medium">{meal.name}</p>
                       <p className="text-sm text-muted-foreground capitalize">{mealTypeTranslations[meal.mealType]}</p>
                     </div>
-                    <div className="text-right">
-                       <p className="font-semibold">{meal.calories.toFixed(0)} سعر حراري</p>
+                    <div className={locale === 'ar' ? "text-left" : "text-right"}>
+                       <p className="font-semibold">{meal.calories.toFixed(0)} {t('calories')}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-center text-muted-foreground">لم يتم تسجيل وجبات اليوم.</p>
+                <p className="text-center text-muted-foreground">{t('noMealsLogged')}</p>
               )}
             </div>
           </CardContent>

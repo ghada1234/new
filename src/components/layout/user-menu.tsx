@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -17,9 +18,11 @@ import { useAuth } from '@/contexts/auth-context';
 import { LifeBuoy, LogOut, User } from 'lucide-react';
 import Link from 'next/link';
 import { Skeleton } from '../ui/skeleton';
+import { useLocale } from '@/contexts/locale-context';
 
 export function UserMenu() {
   const { user, loading, logout } = useAuth();
+  const { t } = useLocale();
 
   if (loading) {
     return (
@@ -63,18 +66,18 @@ export function UserMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/account">
-              <User className="ml-2 h-4 w-4" />
-              <span>الحساب</span>
+              <User className="mr-2 h-4 w-4" />
+              <span>{t('account')}</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <LifeBuoy className="ml-2 h-4 w-4" />
-            <span>الدعم</span>
+            <LifeBuoy className="mr-2 h-4 w-4" />
+            <span>{t('support')}</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={logout}>
-            <LogOut className="ml-2 h-4 w-4" />
-            <span>تسجيل الخروج</span>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>{t('logout')}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

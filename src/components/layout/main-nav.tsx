@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Home,
@@ -13,20 +14,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useLocale } from '@/contexts/locale-context';
 
 const navItems = [
-  { href: '/dashboard', label: 'لوحة التحكم', icon: Home },
-  { href: '/analyze', label: 'تحليل وجبة', icon: ScanLine },
-  { href: '/suggestions', label: 'اقتراحات الوجبات', icon: Lightbulb },
-];
+  { href: '/dashboard', labelKey: 'dashboard', icon: Home },
+  { href: '/analyze', labelKey: 'analyzeMeal', icon: ScanLine },
+  { href: '/suggestions', labelKey: 'aiMealSuggestions', icon: Lightbulb },
+] as const;
 
 export function MainNav() {
   const pathname = usePathname();
+  const { t, locale } = useLocale();
+  const isRtl = locale === 'ar';
 
   return (
     <nav className="flex flex-col items-start gap-2 px-2 text-sm font-medium">
       <TooltipProvider>
-        {navItems.map(({ href, label, icon: Icon }) => (
+        {navItems.map(({ href, labelKey, icon: Icon }) => (
           <Tooltip key={href} delayDuration={0}>
             <TooltipTrigger asChild>
               <Link
@@ -37,11 +41,11 @@ export function MainNav() {
                 )}
               >
                 <Icon className="h-4 w-4" />
-                <span className="truncate">{label}</span>
+                <span className="truncate">{t(labelKey)}</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="left" sideOffset={5}>
-              {label}
+            <TooltipContent side={isRtl ? 'left' : 'right'} sideOffset={5}>
+              {t(labelKey)}
             </TooltipContent>
           </Tooltip>
         ))}

@@ -1,12 +1,14 @@
+
 import { z } from 'zod';
 
-export const registerSchema = z.object({
-  name: z.string().min(2, 'يجب أن يتكون الاسم من حرفين على الأقل.'),
+// We use a function to generate the schema so we can pass the translation function `t`
+export const getRegisterSchema = (t: (key: 'nameMin2Chars' | 'passwordMin6Chars') => string) => z.object({
+  name: z.string().min(2, t('nameMin2Chars')),
   email: z.string().email(),
-  password: z.string().min(6, 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.'),
+  password: z.string().min(6, t('passwordMin6Chars')),
 });
 
-export type RegisterData = z.infer<typeof registerSchema>;
+export type RegisterData = z.infer<ReturnType<typeof getRegisterSchema>>;
 
 export interface LoggedMeal {
   id: string;

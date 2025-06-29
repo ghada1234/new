@@ -1,3 +1,4 @@
+
 'use client';
 import type { PropsWithChildren } from 'react';
 import React, { useState, useEffect } from 'react';
@@ -8,17 +9,22 @@ import { MainNav } from '@/components/layout/main-nav';
 import { UserMenu } from '@/components/layout/user-menu';
 import { Button } from '../ui/button';
 import { Menu } from 'lucide-react';
+import { useLocale } from '@/contexts/locale-context';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { cn } from '@/lib/utils';
 
 export function AppShell({ children }: PropsWithChildren) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const { locale } = useLocale();
+  const isRtl = locale === 'ar';
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   if (!isMounted) {
-    return null; 
+    return null;
   }
 
   return (
@@ -32,7 +38,12 @@ export function AppShell({ children }: PropsWithChildren) {
         </SidebarBody>
         <UserMenu />
       </Sidebar>
-      <div className="flex flex-1 flex-col sm:gap-4 sm:py-4 sm:pr-14">
+      <div
+        className={cn(
+          'flex flex-1 flex-col sm:gap-4 sm:py-4',
+          isRtl ? 'sm:pr-14' : 'sm:pl-14'
+        )}
+      >
         <Header>
           <Button
             variant="ghost"
@@ -43,6 +54,9 @@ export function AppShell({ children }: PropsWithChildren) {
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
+          <div className="flex w-full items-center justify-end gap-2">
+            <LanguageSwitcher />
+          </div>
         </Header>
         <main className="flex-1 p-4 sm:px-6 sm:py-0 md:p-6">{children}</main>
       </div>

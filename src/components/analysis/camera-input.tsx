@@ -1,3 +1,4 @@
+
 'use client';
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { AnalysisResult } from '@/components/analysis/analysis-result';
 import { analyzeFoodImage, type AnalyzeFoodImageOutput } from '@/ai/flows/analyze-food-image';
 import { Loader2, Camera, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useLocale } from '@/contexts/locale-context';
 
 export function CameraInput() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,6 +16,7 @@ export function CameraInput() {
   const [analysisResult, setAnalysisResult] = useState<AnalyzeFoodImageOutput | null>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
   const { toast } = useToast();
+  const { t } = useLocale();
 
   const startCamera = useCallback(async (mode: 'user' | 'environment') => {
     if (stream) {
@@ -30,12 +33,12 @@ export function CameraInput() {
     } catch (err) {
       console.error('Error accessing camera:', err);
       toast({
-        title: "خطأ في الكاميرا",
-        description: "تعذر الوصول إلى الكاميرا. يرجى التحقق من الأذونات.",
+        title: t('cameraErrorTitle'),
+        description: t('cameraErrorDescription'),
         variant: "destructive",
       });
     }
-  }, [stream, toast]);
+  }, [stream, toast, t]);
 
   useEffect(() => {
     startCamera(facingMode);
@@ -70,8 +73,8 @@ export function CameraInput() {
       const result = await analyzeFoodImage({ photoDataUri: photo });
        if ((!result.foodItems || result.foodItems.length === 0) && (!result.estimatedCalories || result.estimatedCalories <= 0)) {
           toast({
-              title: "تعذر تحديد الطعام",
-              description: "لم نتمكن من العثور على أي طعام في الصورة. يرجى المحاولة مرة أخرى بصورة أوضح.",
+              title: t('couldNotIdentifyFood'),
+              description: t('couldNotIdentifyFoodInImage'),
               variant: "destructive"
           });
           setIsLoading(false);
@@ -81,8 +84,8 @@ export function CameraInput() {
     } catch (error) {
       console.error('Analysis failed:', error);
       toast({
-        title: "فشل التحليل",
-        description: "تعذر تحليل الصورة. يرجى المحاولة مرة أخرى.",
+        title: t('analysisFailedTitle'),
+        description: t('analysisFailedDescription'),
         variant: "destructive"
       });
     } finally {
@@ -117,26 +120,26 @@ export function CameraInput() {
       <div className="flex flex-wrap gap-2">
         {!photo && stream && (
           <Button onClick={takePhoto} size="lg">
-            <Camera className="ml-2 h-4 w-4" />
-            التقط صورة
+            <Camera className="mr-2 h-4 w-4" />
+            {t('takePhoto')}
           </Button>
         )}
          {!photo && (
           <Button onClick={toggleCamera} variant="outline">
-            <RefreshCw className="ml-2 h-4 w-4" />
-            تبديل الكاميرا
+            <RefreshCw className="mr-2 h-4 w-4" />
+            {t('switchCamera')}
           </Button>
         )}
         {photo && (
           <>
             <Button onClick={analyzePhoto} size="lg" disabled={isLoading} className="bg-accent hover:bg-accent/90">
-              {isLoading ? (
-                <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-              ) : null}
-              تحليل الصورة
+              {isLoading && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {t('analyzePhoto')}
             </Button>
             <Button onClick={reset} variant="outline" disabled={isLoading}>
-              إعادة التقاط
+              {t('retakePhoto')}
             </Button>
           </>
         )}
