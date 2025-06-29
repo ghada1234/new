@@ -7,18 +7,21 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import { LocaleProvider } from '@/contexts/locale-context';
 import { PreferencesProvider } from '@/contexts/preferences-context';
+import { ThemeProvider } from '@/contexts/theme-context';
 
 export function Providers({ children }: PropsWithChildren) {
   const [queryClient] = useState(() => new QueryClient());
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <LoggedMealProvider>
-          <PreferencesProvider>
-            <LocaleProvider>{children}</LocaleProvider>
-          </PreferencesProvider>
-        </LoggedMealProvider>
-      </AuthProvider>
+      <ThemeProvider defaultTheme="system" storageKey="nutrisnap-theme">
+        <AuthProvider>
+          <LoggedMealProvider>
+            <PreferencesProvider>
+              <LocaleProvider>{children}</LocaleProvider>
+            </PreferencesProvider>
+          </LoggedMealProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

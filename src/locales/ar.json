@@ -135,5 +135,8 @@
   "consumed": "المستهلك",
   "remaining": "المتبقي",
   "target": "الهدف",
-  "sampleSuggestions": "اقتراحات نموذجية"
+  "sampleSuggestions": "اقتراحات نموذجية",
+  "light": "فاتح",
+  "dark": "داكن",
+  "system": "النظام"
 }

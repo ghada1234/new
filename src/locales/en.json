@@ -135,5 +135,8 @@
   "consumed": "Consumed",
   "remaining": "Remaining",
   "target": "Target",
-  "sampleSuggestions": "Sample Suggestions"
+  "sampleSuggestions": "Sample Suggestions",
+  "light": "Light",
+  "dark": "Dark",
+  "system": "System"
 }

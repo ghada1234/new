@@ -1,3 +1,4 @@
+
 'use client';
 
 import type { PropsWithChildren } from 'react';
@@ -12,6 +13,7 @@ import { Menu } from 'lucide-react';
 import { useLocale } from '@/contexts/locale-context';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { cn } from '@/lib/utils';
+import { ThemeSwitcher } from '../theme-switcher';
 
 export function AppShell({ children }: PropsWithChildren) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -54,7 +56,8 @@ export function AppShell({ children }: PropsWithChildren) {
             <span className="sr-only">Toggle Menu</span>
           </Button>
           <div className="flex-1" />
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <ThemeSwitcher />
             <LanguageSwitcher />
             <UserMenu />
           </div>
