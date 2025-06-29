@@ -22,17 +22,29 @@ const prompt = ai.definePrompt({
   name: 'analyzeFoodImagePrompt',
   input: { schema: AnalyzeFoodImageInputSchema },
   output: { schema: NutritionalInfoSchema },
-  prompt: `You are an expert nutritionist AI. Your task is to analyze the provided image of a meal and return a detailed, estimated nutritional breakdown.
+  prompt: `You are a world-class nutritional AI assistant. Your primary function is to analyze an image of a meal and provide a detailed nutritional estimate. You must always identify a food unless the image clearly contains no food.
 
 Photo: {{media url=photoDataUri}}
 
-**ABSOLUTE, CRITICAL, UNBREAKABLE RULES FOR YOUR RESPONSE:**
-1.  **JSON ONLY**: Your entire response MUST be a single, valid JSON object that conforms to the schema. Do not include any text, explanations, or markdown formatting like \`\`\`json.
-2.  **IDENTIFY FOOD**: You MUST make your best effort to identify food items in the image. If the image contains something that is plausibly food (e.g., pizza, an apple, a salad), you MUST identify it in the "foodItems" array.
-3.  **NO ZERO CALORIES FOR REAL FOOD**: This is the most important rule. If you identify one or more food items in the "foodItems" array, the "estimatedCalories" field MUST be a number greater than 0. A dish like 'pizza' or 'salad' cannot have 0 calories. There are no exceptions to this rule, other than plain 'water'.
-4.  **IF UNSURE, STILL GUESS**: If you are not 100% sure what the food is, make an educated guess based on visual evidence. It is better to provide a reasonable estimate than to return 0 calories for something that is clearly food.
-5.  **NON-FOOD IMAGES**: Only if the image unambiguously contains NO food items (e.g., a picture of a car or a rock), should you return a JSON object with an empty "foodItems" array and an "estimatedCalories" of 0.
-6.  **NUTRIENT OMISSION**: If a specific nutrient cannot be estimated, omit its key from the JSON. Do not use a value of 0 unless it is truly zero (like sugar in water).`,
+Follow these instructions with absolute precision:
+1.  **Output Format**: Your entire output must be a single, valid JSON object that strictly adheres to the provided schema. Do not add any extra text or markdown.
+2.  **Food Identification is Mandatory**: You MUST identify food items in the \`foodItems\` array if the image contains anything that could be food.
+3.  **No Zero-Calorie Foods**: If you identify a food, the \`estimatedCalories\` MUST be greater than 0. The only exception is a glass of plain 'water'. If you see a salad, estimate at least 15-20 calories, not 0.
+4.  **Be Comprehensive**: Provide estimates for as many nutrients (macro and micro) as possible. If a nutrient value is genuinely zero, you can omit the key.
+5.  **Explain Your Reasoning**: Briefly explain your analysis in the \`explanation\` field. For example: "The image shows a bowl of what appears to be lentil soup. The estimate is based on a standard serving and includes contributions from lentils, vegetables, and broth."
+6.  **Handle Non-Food**: Only if the image is unambiguously NOT food (e.g., a picture of a laptop), you must return \`{"foodItems": [], "estimatedCalories": 0}\`.
+7.  **Educated Guesses**: If an item is unclear, make a well-reasoned guess based on visual cues. It is better to provide a reasonable estimate for a plausible food than to fail the request.
+
+Example of a good response for an image of a croissant:
+{
+  "foodItems": [{"name": "Croissant"}],
+  "estimatedCalories": 300,
+  "estimatedProtein": 5,
+  "estimatedCarbs": 35,
+  "estimatedFat": 15,
+  "explanation": "Estimate for a standard butter croissant. Calories are primarily from flour, butter, and sugar."
+}
+`,
 });
 
 const analyzeFoodImageFlow = ai.defineFlow(
