@@ -71,9 +71,10 @@ export function CameraInput() {
     setAnalysisResult(null);
     try {
       const result = await analyzeFoodImage({ photoDataUri: photo });
-       // This is a robust check to ensure we don't show nonsensical results.
-       // The AI should not return 0 calories for an identified food, and this prevents it from being displayed.
-       if (!result || !result.foodItems || result.foodItems.length === 0 || (result.estimatedCalories !== 0 && !result.estimatedCalories)) {
+      const isWater = result?.foodItems?.some(item => item.name.toLowerCase().includes('water'));
+      
+      // Robust check: if food is identified, calories must be positive (unless it's water).
+      if (!result || !result.foodItems || result.foodItems.length === 0 || ((!result.estimatedCalories || result.estimatedCalories <= 0) && !isWater)) {
           toast({
               title: t('couldNotIdentifyFood'),
               description: t('couldNotIdentifyFoodInImage'),
