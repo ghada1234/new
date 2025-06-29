@@ -15,26 +15,77 @@ import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLocale } from '@/contexts/locale-context';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { NutrientDisplay } from '@/components/analysis/nutrient-display';
 
 function SuggestionCard({ suggestion }: { suggestion: SuggestMealsOutput[0] }) {
-    const { t } = useLocale();
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>{suggestion.name}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div>
-                    <h4 className="font-semibold">{t('ingredients')}</h4>
-                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{suggestion.ingredients}</p>
+  const { t } = useLocale();
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{suggestion.name}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="ingredients">
+            <AccordionTrigger>{t('ingredients')}</AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                {suggestion.ingredients}
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="instructions">
+            <AccordionTrigger>{t('instructions')}</AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                {suggestion.instructions}
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          {suggestion.nutrition && (
+            <AccordionItem value="nutrition">
+              <AccordionTrigger>{t('nutritionalInformation')}</AccordionTrigger>
+              <AccordionContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                    <NutrientDisplay label={t('totalCalories')} value={suggestion.nutrition.estimatedCalories} unit={t('caloriesUnit')} />
+                    <NutrientDisplay label={t('protein')} value={suggestion.nutrition.estimatedProtein} unit={t('grams')} />
+                    <NutrientDisplay label={t('carbohydrates')} value={suggestion.nutrition.estimatedCarbs} unit={t('grams')} />
+                    <NutrientDisplay label={t('fat')} value={suggestion.nutrition.estimatedFat} unit={t('grams')} />
+                    <NutrientDisplay label={t('saturatedFat')} value={suggestion.nutrition.estimatedSaturatedFat} unit={t('grams')} />
+                    <NutrientDisplay label={t('fiber')} value={suggestion.nutrition.estimatedFiber} unit={t('grams')} />
+                    <NutrientDisplay label={t('sugar')} value={suggestion.nutrition.estimatedSugar} unit={t('grams')} />
+                    <NutrientDisplay label={t('sodium')} value={suggestion.nutrition.estimatedSodium} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('iron')} value={suggestion.nutrition.estimatedIron} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('calcium')} value={suggestion.nutrition.estimatedCalcium} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('magnesium')} value={suggestion.nutrition.estimatedMagnesium} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('zinc')} value={suggestion.nutrition.estimatedZinc} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('vitaminA')} value={suggestion.nutrition.estimatedVitaminA} unit={t('micrograms')} />
+                    <NutrientDisplay label={t('vitaminC')} value={suggestion.nutrition.estimatedVitaminC} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('vitaminD')} value={suggestion.nutrition.estimatedVitaminD} unit={t('micrograms')} />
+                    <NutrientDisplay label={t('vitaminE')} value={suggestion.nutrition.estimatedVitaminE} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('vitaminK')} value={suggestion.nutrition.estimatedVitaminK} unit={t('micrograms')} />
+                    <NutrientDisplay label={t('vitaminB1')} value={suggestion.nutrition.estimatedVitaminB1} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('vitaminB2')} value={suggestion.nutrition.estimatedVitaminB2} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('vitaminB3')} value={suggestion.nutrition.estimatedVitaminB3} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('vitaminB5')} value={suggestion.nutrition.estimatedVitaminB5} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('vitaminB6')} value={suggestion.nutrition.estimatedVitaminB6} unit={t('milligrams')} />
+                    <NutrientDisplay label={t('vitaminB7')} value={suggestion.nutrition.estimatedVitaminB7} unit={t('micrograms')} />
+                    <NutrientDisplay label={t('vitaminB9')} value={suggestion.nutrition.estimatedVitaminB9} unit={t('micrograms')} />
+                    <NutrientDisplay label={t('vitaminB12')} value={suggestion.nutrition.estimatedVitaminB12} unit={t('micrograms')} />
                 </div>
-                <div>
-                    <h4 className="font-semibold">{t('instructions')}</h4>
-                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{suggestion.instructions}</p>
-                </div>
-            </CardContent>
-        </Card>
-    );
+              </AccordionContent>
+            </AccordionItem>
+          )}
+        </Accordion>
+      </CardContent>
+    </Card>
+  );
 }
 
 

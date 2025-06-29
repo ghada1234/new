@@ -15,20 +15,11 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { LoggedMeal } from '@/types';
 import { useLocale } from '@/contexts/locale-context';
+import { NutrientDisplay } from './nutrient-display';
 
 type AnalysisResultProps = {
   result: AnalyzeFoodImageOutput;
   onReset: () => void;
-};
-
-const NutrientDisplay = ({ label, value, unit }: { label: string, value?: number, unit: string }) => {
-    if(value === undefined || value === null) return null;
-    return (
-        <div className="flex justify-between text-sm">
-            <p className="text-muted-foreground">{label}</p>
-            <p className="font-medium">{value.toFixed(1)} {unit}</p>
-        </div>
-    );
 };
 
 export function AnalysisResult({ result, onReset }: AnalysisResultProps) {

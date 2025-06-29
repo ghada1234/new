@@ -18,7 +18,7 @@ const SuggestMealsOutputSchema = z.array(
     name: z.string().describe('Name of the suggested meal, in the requested language.'),
     ingredients: z.string().describe('List of ingredients for the meal, in the requested language.'),
     instructions: z.string().describe('Instructions for preparing the meal, in the requested language.'),
-    nutrition: NutritionalInfoSchema.optional().describe('Estimated nutritional information for one serving of the meal.')
+    nutrition: NutritionalInfoSchema.describe('Estimated nutritional information for one serving of the meal, including macro and micro nutrients.')
   })
 );
 
@@ -46,7 +46,7 @@ const prompt = ai.definePrompt({
   CRITICAL RULES:
   1. Your entire response MUST be a single, valid JSON array of meal objects. Do not include any other text, explanations, or markdown formatting like \`\`\`json.
   2. For each meal, provide a name, a list of ingredients, and preparation instructions. All of this text MUST be in the requested language ('{{#if language}}{{language}}{{else}}en{{/if}}').
-  3. For each meal, you MUST provide an estimated nutritional breakdown for one serving under a "nutrition" key. This nutritional info should be as complete as possible.
+  3. For each meal, you MUST provide a detailed estimated nutritional breakdown for one serving under a "nutrition" key. This nutritional info MUST be as complete as possible, including macro (calories, protein, carbs, fat) and micro nutrients.
   4. Unless it is impossible to meet the user's constraints, you MUST return the requested number of suggestions. If you absolutely cannot generate suggestions, you MUST return an empty JSON array: [].`,
 });
 
