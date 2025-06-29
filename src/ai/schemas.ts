@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 // This is the most detailed output schema, which can be reused by all estimators.
 export const NutritionalInfoSchema = z.object({
-  foodItems: z.array(z.object({ name: z.string() })).optional().describe("An array of food items identified in the meal."),
-  estimatedCalories: z.number().optional().describe('The estimated calorie count of the dish.'),
+  foodItems: z.array(z.object({ name: z.string() })).min(1, { message: "AI must identify at least one food item." }).describe("An array of food items identified in the meal. This cannot be empty."),
+  estimatedCalories: z.number().describe('The estimated calorie count of the dish. Must be greater than 0 for any food item.'),
   estimatedProtein: z.number().optional().describe('Estimated protein content in grams'),
   estimatedCarbs: z.number().optional().describe('Estimated carbohydrates content in grams'),
   estimatedFat: z.number().optional().describe('Estimated fat content in grams'),
@@ -29,7 +29,7 @@ export const NutritionalInfoSchema = z.object({
   estimatedMagnesium: z.number().optional().describe('Estimated Magnesium content in milligrams'),
   estimatedZinc: z.number().optional().describe('Estimated Zinc content in milligrams'),
   confidence: z.number().optional().describe('The confidence level of the AI in its estimation.'),
-  explanation: z.string().optional().describe('The explanation of how the AI arrived at its estimation.'),
+  explanation: z.string().describe('The explanation of how the AI arrived at its estimation. This field is required.'),
 });
 
 export type AnalyzeFoodImageOutput = z.infer<typeof NutritionalInfoSchema>;

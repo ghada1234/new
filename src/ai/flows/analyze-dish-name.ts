@@ -26,28 +26,16 @@ const prompt = ai.definePrompt({
   name: 'analyzeDishNamePrompt',
   input: { schema: AnalyzeDishNameInputSchema },
   output: { schema: NutritionalInfoSchema },
-  prompt: `You are a nutritional analysis AI. Your task is to analyze the provided dish name and return a nutritional estimate in JSON format.
+  prompt: `You are a nutritional analysis AI. Your task is to analyze the provided dish name and return a detailed nutritional estimate.
 
 Dish Name: {{{dishName}}}
 {{#if portionSize}}Portion Size: {{{portionSize}}}{{/if}}
 
-CRITICAL RULES:
-1.  **JSON ONLY**: Your entire response MUST be a single, valid JSON object matching the output schema. No extra text.
-2.  **ALWAYS IDENTIFY FOOD**: You MUST make a best-effort guess to identify a food item. If the input is "Torsken", guess it's "Cod fish". For any plausible food, you MUST identify it.
-3.  **NEVER ZERO CALORIES FOR FOOD**: If \`foodItems\` is not empty, \`estimatedCalories\` MUST be a number greater than 0. A green salad is not 0 calories, it's at least 15. The only exception is plain "water".
-4.  **HANDLE NON-FOOD**: Only if the input is definitively NOT a food item (e.g., "chair", "running"), return \`{"foodItems": [], "estimatedCalories": 0}\`.
-5.  **EXPLAIN**: Briefly justify your estimate in the \`explanation\` field.
-
-Example Input: "Koshary"
-Example Output:
-{
-  "foodItems": [{"name": "Koshary"}],
-  "estimatedCalories": 500,
-  "estimatedProtein": 20,
-  "estimatedCarbs": 90,
-  "estimatedFat": 8,
-  "explanation": "Estimate for a standard serving of Koshary, an Egyptian dish with rice, pasta, and lentils."
-}
+CRITICAL INSTRUCTIONS:
+1.  **Identify the Food**: You MUST identify at least one food item in the \`foodItems\` array. The input is always a food item. Make a best-effort guess if you are unsure (e.g., if the input is "Torsken", identify it as "Cod fish"). Do not return an empty array for \`foodItems\`. If the input is not a food, identify it as what it is (e.g., "a chair").
+2.  **Estimate Calories**: You MUST provide an \`estimatedCalories\` value. For any identified food, this value MUST be greater than zero. Only plain water can have zero calories. If the input is not a food, return 0.
+3.  **Explain**: You MUST provide a brief \`explanation\` for your analysis.
+4.  **Full Nutrition**: Fill out as many of the other nutritional fields (protein, fat, vitamins, etc.) as you can based on the identified food.
 `
 });
 
@@ -60,9 +48,8 @@ const analyzeDishNameFlow = ai.defineFlow(
   async input => {
     const { output } = await prompt(input);
     if (!output) {
-      // This can happen if the model call fails or is blocked by safety settings.
-      // We will return an object that the frontend check will catch as invalid.
-      return { foodItems: [], estimatedCalories: 0 };
+      // This can happen if the model call fails, is blocked, or returns JSON that doesn't match the required schema.
+      throw new Error('AI model failed to return a valid analysis.');
     }
     return output;
   }

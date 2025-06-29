@@ -23,26 +23,15 @@ const prompt = ai.definePrompt({
   name: 'analyzeFoodImagePrompt',
   input: { schema: AnalyzeFoodImageInputSchema },
   output: { schema: NutritionalInfoSchema },
-  prompt: `You are a nutritional analysis AI. Your task is to analyze the provided image and return a nutritional estimate in JSON format.
+  prompt: `You are a nutritional analysis AI. Your task is to analyze the provided image and return a detailed nutritional estimate.
 
 Photo: {{media url=photoDataUri}}
 
-CRITICAL RULES:
-1.  **JSON ONLY**: Your entire response MUST be a single, valid JSON object matching the output schema. No extra text.
-2.  **ALWAYS IDENTIFY FOOD**: You MUST make a best-effort guess to identify a food item in the image. For any plausible food, you MUST identify it in the \`foodItems\` array.
-3.  **NEVER ZERO CALORIES FOR FOOD**: If \`foodItems\` is not empty, \`estimatedCalories\` MUST be a number greater than 0. A salad in the image is not 0 calories, it's at least 15. The only exception is a glass of plain "water".
-4.  **HANDLE NON-FOOD**: Only if the image definitively contains NO food items (e.g., a picture of a car), return \`{"foodItems": [], "estimatedCalories": 0}\`.
-5.  **EXPLAIN**: Briefly justify your estimate in the \`explanation\` field.
-
-Example for an image of a pizza slice:
-{
-  "foodItems": [{"name": "Pizza Slice"}],
-  "estimatedCalories": 285,
-  "estimatedProtein": 12,
-  "estimatedCarbs": 36,
-  "estimatedFat": 10,
-  "explanation": "Estimate for a standard slice of pepperoni pizza. Calories are from the crust, cheese, sauce, and pepperoni."
-}
+CRITICAL INSTRUCTIONS:
+1.  **Identify the Food**: You MUST identify at least one food item in the \`foodItems\` array. Make a best-effort guess if you are unsure. Do not return an empty array for \`foodItems\`. If the image does not contain food, identify the object (e.g., "a red car").
+2.  **Estimate Calories**: You MUST provide an \`estimatedCalories\` value. For any identified food, this value MUST be greater than zero. Only plain water can have zero calories. A small salad is at least 15 calories. If the image is not food, return 0.
+3.  **Explain**: You MUST provide a brief \`explanation\` for your analysis.
+4.  **Full Nutrition**: Fill out as many of the other nutritional fields (protein, fat, vitamins, etc.) as you can based on the identified food.
 `,
 });
 
@@ -55,9 +44,8 @@ const analyzeFoodImageFlow = ai.defineFlow(
   async input => {
     const { output } = await prompt(input);
     if (!output) {
-      // This can happen if the model call fails or is blocked by safety settings.
-      // We will return an object that the frontend check will catch as invalid.
-      return { foodItems: [], estimatedCalories: 0 };
+      // This can happen if the model call fails, is blocked, or returns JSON that doesn't match the required schema.
+      throw new Error('AI model failed to return a valid analysis.');
     }
     return output;
   }
