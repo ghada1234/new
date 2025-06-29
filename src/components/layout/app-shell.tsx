@@ -1,5 +1,5 @@
-
 'use client';
+
 import type { PropsWithChildren } from 'react';
 import React, { useState, useEffect } from 'react';
 import { Sidebar, SidebarBody, SidebarHeader } from '@/components/layout/sidebar';
@@ -36,7 +36,6 @@ export function AppShell({ children }: PropsWithChildren) {
         <SidebarBody className="flex-grow">
           <MainNav />
         </SidebarBody>
-        <UserMenu />
       </Sidebar>
       <div
         className={cn(
@@ -54,8 +53,10 @@ export function AppShell({ children }: PropsWithChildren) {
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
-          <div className="flex w-full items-center justify-end gap-2">
+          <div className="flex-1" />
+          <div className="flex items-center gap-4">
             <LanguageSwitcher />
+            <UserMenu />
           </div>
         </Header>
         <main className="flex-1 p-4 sm:px-6 sm:py-0 md:p-6">{children}</main>
