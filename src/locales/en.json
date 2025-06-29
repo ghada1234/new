@@ -139,5 +139,17 @@
   "light": "Light",
   "dark": "Dark",
   "system": "System",
-  "orContinueWith": "Or continue with"
+  "orContinueWith": "Or continue with",
+  "uploadImage": "Upload Image",
+  "uploadImageDescription": "Select an image from your device to analyze its nutritional content.",
+  "fileTooLargeTitle": "File Too Large",
+  "fileTooLargeDescription": "The selected file exceeds the {size} limit. Please choose a smaller file.",
+  "invalidFileTypeTitle": "Invalid File Type",
+  "invalidFileTypeDescription": "Please select a JPG, PNG, or WEBP image.",
+  "imagePreviewAlt": "Image preview",
+  "changeImage": "Change Image",
+  "selectImage": "Select Image",
+  "clickToUpload": "Click to upload",
+  "orDragAndDrop": "or drag and drop",
+  "supportedFormats": "PNG, JPG, or WEBP (MAX. 5MB)"
 }

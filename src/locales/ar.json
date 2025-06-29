@@ -139,5 +139,17 @@
   "light": "فاتح",
   "dark": "داكن",
   "system": "النظام",
-  "orContinueWith": "أو المتابعة باستخدام"
+  "orContinueWith": "أو المتابعة باستخدام",
+  "uploadImage": "تحميل صورة",
+  "uploadImageDescription": "اختر صورة من جهازك لتحليل محتواها الغذائي.",
+  "fileTooLargeTitle": "الملف كبير جدًا",
+  "fileTooLargeDescription": "الملف المحدد يتجاوز حد {size}. يرجى اختيار ملف أصغر.",
+  "invalidFileTypeTitle": "نوع ملف غير صالح",
+  "invalidFileTypeDescription": "يرجى اختيار صورة من نوع JPG أو PNG أو WEBP.",
+  "imagePreviewAlt": "معاينة الصورة",
+  "changeImage": "تغيير الصورة",
+  "selectImage": "اختر صورة",
+  "clickToUpload": "انقر للتحميل",
+  "orDragAndDrop": "أو اسحب وأفلت",
+  "supportedFormats": "PNG, JPG, أو WEBP (بحد أقصى 5 ميجابايت)"
 }
