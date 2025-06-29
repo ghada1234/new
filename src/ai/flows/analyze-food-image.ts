@@ -32,7 +32,7 @@ Photo: {{media url=photoDataUri}}
 CRITICAL INSTRUCTIONS:
 1.  **Identify the Food**: You MUST identify at least one food item in the \`foodItems\` array. Make a best-effort guess if you are unsure (e.g., if you see a grilled fish on a platter, you might identify it as "Masgouf (Iraqi grilled fish)" if it matches the appearance). Do not return an empty array for \`foodItems\`. If the image does not contain food, identify the object (e.g., "a red car").
 2.  **List Ingredients**: If possible, provide a list of estimated ingredients in the \`ingredients\` array based on the image.
-3.  **Estimate Calories**: You MUST provide an \`estimatedCalories\` value. For any identified food, this value MUST be greater than zero. Only plain water can have zero calories. A small salad is at least 15 calories. If the image is not food, return 0.
+3.  **Estimate Calories**: You MUST provide an \`estimatedCalories\` value. If the image is not food, return 0.
 4.  **Explain**: You MUST provide a brief \`explanation\` for your analysis.
 5.  **Confidence Score**: If possible, provide a \`confidence\` score between 0 and 1, representing your confidence in the accuracy of the overall analysis.
 6.  **Full Nutrition**: Fill out as many of the other nutritional fields (protein, fat, vitamins, etc.) as you can based on the identified food.
