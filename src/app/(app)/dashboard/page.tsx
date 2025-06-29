@@ -18,6 +18,7 @@ import {
   Droplets,
 } from 'lucide-react';
 import { useLocale } from '@/contexts/locale-context';
+import { NutrientDisplay } from '@/components/analysis/nutrient-display';
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
     <Card>
@@ -41,15 +42,64 @@ export default function DashboardPage() {
   }, [loggedMeals]);
 
   const dailyStats = useMemo(() => {
+    const initialStats = {
+      totalCalories: 0,
+      totalProtein: 0,
+      totalCarbs: 0,
+      totalFat: 0,
+      totalSaturatedFat: 0,
+      totalFiber: 0,
+      totalSugar: 0,
+      totalSodium: 0,
+      totalVitaminA: 0,
+      totalVitaminC: 0,
+      totalVitaminD: 0,
+      totalVitaminE: 0,
+      totalVitaminK: 0,
+      totalVitaminB1: 0,
+      totalVitaminB2: 0,
+      totalVitaminB3: 0,
+      totalVitaminB5: 0,
+      totalVitaminB6: 0,
+      totalVitaminB7: 0,
+      totalVitaminB9: 0,
+      totalVitaminB12: 0,
+      totalCalcium: 0,
+      totalIron: 0,
+      totalMagnesium: 0,
+      totalZinc: 0,
+    };
+    
     return todayMeals.reduce(
       (acc, meal) => {
-        acc.totalCalories += meal.calories;
-        acc.totalProtein += meal.protein;
-        acc.totalCarbs += meal.carbs;
-        acc.totalFat += meal.fat;
+        acc.totalCalories += meal.calories || 0;
+        acc.totalProtein += meal.protein || 0;
+        acc.totalCarbs += meal.carbs || 0;
+        acc.totalFat += meal.fat || 0;
+        acc.totalSaturatedFat += meal.saturatedFat || 0;
+        acc.totalFiber += meal.fiber || 0;
+        acc.totalSugar += meal.sugar || 0;
+        acc.totalSodium += meal.sodium || 0;
+        acc.totalIron += meal.iron || 0;
+        acc.totalCalcium += meal.calcium || 0;
+        acc.totalMagnesium += meal.magnesium || 0;
+        acc.totalZinc += meal.zinc || 0;
+        acc.totalVitaminA += meal.vitaminA || 0;
+        acc.totalVitaminC += meal.vitaminC || 0;
+        acc.totalVitaminD += meal.vitaminD || 0;
+        acc.totalVitaminE += meal.vitaminE || 0;
+        acc.totalVitaminK += meal.vitaminK || 0;
+        acc.totalVitaminB1 += meal.vitaminB1 || 0;
+        acc.totalVitaminB2 += meal.vitaminB2 || 0;
+        acc.totalVitaminB3 += meal.vitaminB3 || 0;
+        acc.totalVitaminB5 += meal.vitaminB5 || 0;
+        acc.totalVitaminB6 += meal.vitaminB6 || 0;
+        acc.totalVitaminB7 += meal.vitaminB7 || 0;
+        acc.totalVitaminB9 += meal.vitaminB9 || 0;
+        acc.totalVitaminB12 += meal.vitaminB12 || 0;
         return acc;
       },
-      { totalCalories: 0, totalProtein: 0, totalCarbs: 0, totalFat: 0 }
+      initialStats
     );
   }, [todayMeals]);
 
@@ -80,8 +130,8 @@ export default function DashboardPage() {
         <StatCard title={t('carbohydrates')} value={`${dailyStats.totalCarbs.toFixed(0)} ${t('grams')}`} icon={Wheat} />
         <StatCard title={t('fat')} value={`${dailyStats.totalFat.toFixed(0)} ${t('grams')}`} icon={Droplets} />
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
+      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-5">
+        <Card className="xl:col-span-3">
           <CardHeader>
             <CardTitle>{t('caloriesByMealType')}</CardTitle>
           </CardHeader>
@@ -97,33 +147,63 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        <Card className="col-span-4 lg:col-span-3">
-          <CardHeader>
-            <CardTitle>{t('todaysMeals')}</CardTitle>
-            <CardDescription>
-              {t('mealsLoggedToday', { count: todayMeals.length })}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {todayMeals.length > 0 ? (
-                todayMeals.map((meal) => (
-                  <div key={meal.id} className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{meal.name}</p>
-                      <p className="text-sm text-muted-foreground capitalize">{mealTypeTranslations[meal.mealType]}</p>
+        <div className="space-y-4 xl:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('todaysMeals')}</CardTitle>
+              <CardDescription>
+                {t('mealsLoggedToday', { count: todayMeals.length })}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {todayMeals.length > 0 ? (
+                  todayMeals.map((meal) => (
+                    <div key={meal.id} className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{meal.name}</p>
+                        <p className="text-sm text-muted-foreground capitalize">{mealTypeTranslations[meal.mealType]}</p>
+                      </div>
+                      <div className={locale === 'ar' ? "text-left" : "text-right"}>
+                         <p className="font-semibold">{meal.calories.toFixed(0)} {t('calories')}</p>
+                      </div>
                     </div>
-                    <div className={locale === 'ar' ? "text-left" : "text-right"}>
-                       <p className="font-semibold">{meal.calories.toFixed(0)} {t('calories')}</p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-center text-muted-foreground">{t('noMealsLogged')}</p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                  ))
+                ) : (
+                  <p className="text-center text-muted-foreground">{t('noMealsLogged')}</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+              <CardHeader>
+                  <CardTitle>{t('nutrientBreakdown')}</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                  <NutrientDisplay label={t('saturatedFat')} value={dailyStats.totalSaturatedFat} unit={t('grams')} />
+                  <NutrientDisplay label={t('fiber')} value={dailyStats.totalFiber} unit={t('grams')} />
+                  <NutrientDisplay label={t('sugar')} value={dailyStats.totalSugar} unit={t('grams')} />
+                  <NutrientDisplay label={t('sodium')} value={dailyStats.totalSodium} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('iron')} value={dailyStats.totalIron} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('calcium')} value={dailyStats.totalCalcium} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('magnesium')} value={dailyStats.totalMagnesium} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('zinc')} value={dailyStats.totalZinc} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('vitaminA')} value={dailyStats.totalVitaminA} unit={t('micrograms')} />
+                  <NutrientDisplay label={t('vitaminC')} value={dailyStats.totalVitaminC} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('vitaminD')} value={dailyStats.totalVitaminD} unit={t('micrograms')} />
+                  <NutrientDisplay label={t('vitaminE')} value={dailyStats.totalVitaminE} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('vitaminK')} value={dailyStats.totalVitaminK} unit={t('micrograms')} />
+                  <NutrientDisplay label={t('vitaminB1')} value={dailyStats.totalVitaminB1} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('vitaminB2')} value={dailyStats.totalVitaminB2} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('vitaminB3')} value={dailyStats.totalVitaminB3} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('vitaminB5')} value={dailyStats.totalVitaminB5} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('vitaminB6')} value={dailyStats.totalVitaminB6} unit={t('milligrams')} />
+                  <NutrientDisplay label={t('vitaminB7')} value={dailyStats.totalVitaminB7} unit={t('micrograms')} />
+                  <NutrientDisplay label={t('vitaminB9')} value={dailyStats.totalVitaminB9} unit={t('micrograms')} />
+                  <NutrientDisplay label={t('vitaminB12')} value={dailyStats.totalVitaminB12} unit={t('micrograms')} />
+              </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
