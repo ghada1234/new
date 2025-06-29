@@ -49,7 +49,7 @@ export default function SuggestionsPage() {
   );
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,6 +64,7 @@ export default function SuggestionsPage() {
         dietaryRestrictions: preferences.dietaryRestrictions,
         allergies: preferences.allergies,
         caloricIntake: parseInt(preferences.caloricIntake, 10),
+        language: locale,
       });
       setSuggestions(result);
     } catch (error) {
