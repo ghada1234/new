@@ -148,5 +148,6 @@
   "analyzeMealCardDescription": "Snap a photo or type a name to get instant nutritional details about your meal.",
   "viewDashboard": "View Dashboard",
   "viewDashboardCardDescription": "See a full breakdown of your daily and historical nutritional intake.",
-  "getSuggestionsCardDescription": "Let our AI chef suggest delicious and healthy meals tailored to your goals."
+  "getSuggestionsCardDescription": "Let our AI chef suggest delicious and healthy meals tailored to your goals.",
+  "orContinueWith": "Or continue with"
 }

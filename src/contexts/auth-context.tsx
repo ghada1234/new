@@ -14,8 +14,9 @@ import {
   signOut,
   updateProfile,
   type User,
+  signInWithPopup,
 } from 'firebase/auth';
-import { auth as firebaseAuth, isFirebaseConfigured } from '@/lib/firebase';
+import { auth as firebaseAuth, isFirebaseConfigured, googleProvider, facebookProvider } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import type { RegisterData } from '@/types';
 
@@ -25,6 +26,8 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<User | null>;
   login: (email: string, pass: string) => Promise<User | null>;
   logout: () => Promise<void>;
+  loginWithGoogle: () => Promise<User | null>;
+  loginWithFacebook: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -89,6 +92,24 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     return userCredential.user;
   };
 
+  const loginWithGoogle = async () => {
+    if (!isFirebaseConfigured()) {
+        setUser(mockUser);
+        return mockUser;
+    }
+    const userCredential = await signInWithPopup(firebaseAuth, googleProvider);
+    return userCredential.user;
+  }
+  
+  const loginWithFacebook = async () => {
+    if (!isFirebaseConfigured()) {
+        setUser(mockUser);
+        return mockUser;
+    }
+    const userCredential = await signInWithPopup(firebaseAuth, facebookProvider);
+    return userCredential.user;
+  }
+
   const register = async (data: RegisterData) => {
     if (!isFirebaseConfigured()) {
       setUser(mockUser);
@@ -116,7 +137,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout, loginWithGoogle, loginWithFacebook }}>
       {children}
     </AuthContext.Provider>
   );

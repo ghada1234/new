@@ -148,5 +148,6 @@
   "analyzeMealCardDescription": "التقط صورة أو اكتب اسمًا للحصول على تفاصيل غذائية فورية عن وجبتك.",
   "viewDashboard": "عرض لوحة التحكم",
   "viewDashboardCardDescription": "شاهد تحليلاً كاملاً لمدخولك الغذائي اليومي والتاريخي.",
-  "getSuggestionsCardDescription": "دع الطاهي الذكي يقترح وجبات لذيذة وصحية مصممة خصيصًا لأهدافك."
+  "getSuggestionsCardDescription": "دع الطاهي الذكي يقترح وجبات لذيذة وصحية مصممة خصيصًا لأهدافك.",
+  "orContinueWith": "أو المتابعة باستخدام"
 }
