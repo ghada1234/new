@@ -149,5 +149,7 @@
   "viewDashboard": "عرض لوحة التحكم",
   "viewDashboardCardDescription": "شاهد تحليلاً كاملاً لمدخولك الغذائي اليومي والتاريخي.",
   "getSuggestionsCardDescription": "دع الطاهي الذكي يقترح وجبات لذيذة وصحية مصممة خصيصًا لأهدافك.",
-  "orContinueWith": "أو المتابعة باستخدام"
+  "orContinueWith": "أو المتابعة باستخدام",
+  "profileUpdatedTitle": "تم تحديث الملف الشخصي",
+  "profileUpdatedDescription": "تم حفظ معلومات ملفك الشخصي بنجاح."
 }

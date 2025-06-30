@@ -28,6 +28,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   loginWithGoogle: () => Promise<User | null>;
   loginWithFacebook: () => Promise<User | null>;
+  updateUserProfile: (data: { displayName?: string; photoURL?: string }) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -136,8 +137,28 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     router.push('/login');
   };
 
+  const updateUserProfile = async (data: { displayName?: string; photoURL?: string }) => {
+    if (!isFirebaseConfigured()) {
+      if (user) {
+        // For the mock user, just update the state object
+        const updatedMockUser = { ...user, ...data };
+        // We have to cast here because the mock user doesn't have the full User methods
+        setUser(updatedMockUser as User); 
+      }
+      return;
+    }
+    const currentUser = firebaseAuth.currentUser;
+    if (currentUser) {
+      await updateProfile(currentUser, data);
+      // The currentUser object from auth is updated in-place.
+      // We create a new object to trigger React's state update.
+      // This is safe for this app as we only access data properties from the user object.
+      setUser({ ...currentUser });
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, register, login, logout, loginWithGoogle, loginWithFacebook }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout, loginWithGoogle, loginWithFacebook, updateUserProfile }}>
       {children}
     </AuthContext.Provider>
   );

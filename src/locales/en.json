@@ -149,5 +149,7 @@
   "viewDashboard": "View Dashboard",
   "viewDashboardCardDescription": "See a full breakdown of your daily and historical nutritional intake.",
   "getSuggestionsCardDescription": "Let our AI chef suggest delicious and healthy meals tailored to your goals.",
-  "orContinueWith": "Or continue with"
+  "orContinueWith": "Or continue with",
+  "profileUpdatedTitle": "Profile Updated",
+  "profileUpdatedDescription": "Your profile information has been saved successfully."
 }
