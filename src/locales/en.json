@@ -139,5 +139,14 @@
   "goalsSavedErrorTitle": "Error Saving Goals",
   "goalsSavedErrorDescription": "We could not save your health goals. Please try again.",
   "remainingCalories": "Remaining",
-  "negativeValueError": "Value cannot be negative."
+  "negativeValueError": "Value cannot be negative.",
+  "home": "Home",
+  "welcomeBack": "Welcome back, {name}!",
+  "homeSubtitle": "Ready to take control of your nutrition today?",
+  "caloriesConsumed": "Calories Consumed",
+  "getStarted": "Get Started",
+  "analyzeMealCardDescription": "Snap a photo or type a name to get instant nutritional details about your meal.",
+  "viewDashboard": "View Dashboard",
+  "viewDashboardCardDescription": "See a full breakdown of your daily and historical nutritional intake.",
+  "getSuggestionsCardDescription": "Let our AI chef suggest delicious and healthy meals tailored to your goals."
 }

@@ -4,7 +4,8 @@ import {
   Home,
   ScanLine,
   Lightbulb,
-  Info
+  Info,
+  LayoutDashboard,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -18,7 +19,8 @@ import {
 import { useLocale } from '@/contexts/locale-context';
 
 const navItems = [
-  { href: '/dashboard', labelKey: 'dashboard', icon: Home },
+  { href: '/home', labelKey: 'home', icon: Home },
+  { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
   { href: '/analyze', labelKey: 'analyzeMeal', icon: ScanLine },
   { href: '/suggestions', labelKey: 'aiMealSuggestions', icon: Lightbulb },
   { href: '/about', labelKey: 'aboutMe', icon: Info },

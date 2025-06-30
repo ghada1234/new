@@ -4,7 +4,7 @@ import Link from 'next/link';
 export function Logo() {
   return (
     <Link
-      href="/dashboard"
+      href="/home"
       className="group flex items-center gap-2 px-2.5 text-foreground"
     >
       <UtensilsCrossed className="h-6 w-6 text-primary transition-all group-hover:scale-110" />
