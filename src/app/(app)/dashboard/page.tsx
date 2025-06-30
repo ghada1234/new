@@ -15,10 +15,12 @@ import {
   Flame,
   Beef,
   Wheat,
-  Droplets,
+  Target,
 } from 'lucide-react';
 import { useLocale } from '@/contexts/locale-context';
 import { NutrientDisplay } from '@/components/analysis/nutrient-display';
+import { useHealthGoals } from '@/contexts/health-goals-context';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
     <Card>
@@ -33,7 +35,8 @@ const StatCard = ({ title, value, icon: Icon }: { title: string, value: string, 
 );
 
 export default function DashboardPage() {
-  const { loggedMeals, isLoading } = useLoggedMeals();
+  const { loggedMeals, isLoading: mealsLoading } = useLoggedMeals();
+  const { healthGoals, isLoading: goalsLoading } = useHealthGoals();
   const { t, locale } = useLocale();
   
   const todayMeals = useMemo(() => {
@@ -102,6 +105,10 @@ export default function DashboardPage() {
       initialStats
     );
   }, [todayMeals]);
+  
+  const remainingCalories = useMemo(() => {
+    return healthGoals.calories - dailyStats.totalCalories;
+  }, [healthGoals.calories, dailyStats.totalCalories]);
 
   const chartData = [
     { name: t('breakfast'), calories: todayMeals.filter(m => m.mealType === 'breakfast').reduce((sum, m) => sum + m.calories, 0) },
@@ -117,18 +124,37 @@ export default function DashboardPage() {
       snack: t('snack')
   }
 
+  const isLoading = mealsLoading || goalsLoading;
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+        <div className="flex flex-1 flex-col gap-4">
+            <Skeleton className="h-8 w-48" />
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Skeleton className="h-28" />
+                <Skeleton className="h-28" />
+                <Skeleton className="h-28" />
+                <Skeleton className="h-28" />
+            </div>
+            <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-5">
+                <Skeleton className="xl:col-span-3 h-[400px]" />
+                <div className="space-y-4 xl:col-span-2">
+                    <Skeleton className="h-48" />
+                    <Skeleton className="h-72" />
+                </div>
+            </div>
+        </div>
+    )
   }
 
   return (
     <div className="flex flex-1 flex-col gap-4">
       <h1 className="font-headline text-2xl font-bold">{t('dashboardToday')}</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard title={t('totalCalories')} value={`${dailyStats.totalCalories.toFixed(0)} ${t('calories')}`} icon={Flame} />
-        <StatCard title={t('protein')} value={`${dailyStats.totalProtein.toFixed(0)} ${t('grams')}`} icon={Beef} />
-        <StatCard title={t('carbohydrates')} value={`${dailyStats.totalCarbs.toFixed(0)} ${t('grams')}`} icon={Wheat} />
-        <StatCard title={t('fat')} value={`${dailyStats.totalFat.toFixed(0)} ${t('grams')}`} icon={Droplets} />
+        <StatCard title={t('totalCalories')} value={`${dailyStats.totalCalories.toFixed(0)} / ${healthGoals.calories.toFixed(0)}`} icon={Flame} />
+        <StatCard title={t('remainingCalories')} value={`${remainingCalories.toFixed(0)} ${t('calories')}`} icon={Target} />
+        <StatCard title={t('protein')} value={`${dailyStats.totalProtein.toFixed(0)} / ${healthGoals.protein.toFixed(0)}g`} icon={Beef} />
+        <StatCard title={t('carbohydrates')} value={`${dailyStats.totalCarbs.toFixed(0)} / ${healthGoals.carbs.toFixed(0)}g`} icon={Wheat} />
       </div>
       <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-5">
         <Card className="xl:col-span-3">
@@ -180,6 +206,7 @@ export default function DashboardPage() {
                   <CardTitle>{t('nutrientBreakdown')}</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                  <NutrientDisplay label={t('fat')} value={dailyStats.totalFat} unit={`${t('grams')} / ${healthGoals.fat.toFixed(0)}g`} />
                   <NutrientDisplay label={t('saturatedFat')} value={dailyStats.totalSaturatedFat} unit={t('grams')} />
                   <NutrientDisplay label={t('fiber')} value={dailyStats.totalFiber} unit={t('grams')} />
                   <NutrientDisplay label={t('sugar')} value={dailyStats.totalSugar} unit={t('grams')} />
