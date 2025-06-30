@@ -3,6 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CameraInput } from '@/components/analysis/camera-input';
 import { DishNameInput } from '@/components/analysis/dish-name-input';
+import { FileUploadInput } from '@/components/analysis/file-upload-input';
 import { useLocale } from '@/contexts/locale-context';
 
 export default function AnalyzePage() {
@@ -14,15 +15,19 @@ export default function AnalyzePage() {
         {t('analyzeMealDescription')}
       </p>
       <Tabs defaultValue="camera" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="camera">{t('camera')}</TabsTrigger>
           <TabsTrigger value="text">{t('dishName')}</TabsTrigger>
+          <TabsTrigger value="upload">{t('upload')}</TabsTrigger>
         </TabsList>
         <TabsContent value="camera">
           <CameraInput />
         </TabsContent>
         <TabsContent value="text">
           <DishNameInput />
+        </TabsContent>
+        <TabsContent value="upload">
+          <FileUploadInput />
         </TabsContent>
       </Tabs>
     </div>

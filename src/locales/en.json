@@ -151,5 +151,12 @@
   "getSuggestionsCardDescription": "Let our AI chef suggest delicious and healthy meals tailored to your goals.",
   "orContinueWith": "Or continue with",
   "profileUpdatedTitle": "Profile Updated",
-  "profileUpdatedDescription": "Your profile information has been saved successfully."
+  "profileUpdatedDescription": "Your profile information has been saved successfully.",
+  "upload": "Upload",
+  "uploadFileDescription": "Upload an image from your device (Max {size}MB, JPG/PNG).",
+  "selectImage": "Select an image to upload",
+  "changeImage": "Change Image",
+  "fileUploadErrorTitle": "File Upload Error",
+  "fileTooLarge": "File is too large. Maximum size is {size}MB.",
+  "invalidFileType": "Invalid file type. Please select a JPG or PNG image."
 }

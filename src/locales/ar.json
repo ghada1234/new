@@ -151,5 +151,12 @@
   "getSuggestionsCardDescription": "دع الطاهي الذكي يقترح وجبات لذيذة وصحية مصممة خصيصًا لأهدافك.",
   "orContinueWith": "أو المتابعة باستخدام",
   "profileUpdatedTitle": "تم تحديث الملف الشخصي",
-  "profileUpdatedDescription": "تم حفظ معلومات ملفك الشخصي بنجاح."
+  "profileUpdatedDescription": "تم حفظ معلومات ملفك الشخصي بنجاح.",
+  "upload": "رفع صورة",
+  "uploadFileDescription": "ارفع صورة من جهازك (بحد أقصى {size} ميغابايت، JPG/PNG).",
+  "selectImage": "اختر صورة للرفع",
+  "changeImage": "تغيير الصورة",
+  "fileUploadErrorTitle": "خطأ في رفع الملف",
+  "fileTooLarge": "حجم الملف كبير جداً. الحجم الأقصى هو {size} ميغابايت.",
+  "invalidFileType": "نوع الملف غير صالح. يرجى اختيار صورة من نوع JPG أو PNG."
 }
