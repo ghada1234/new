@@ -17,15 +17,19 @@ import { useHealthGoals, type HealthGoals } from '@/contexts/health-goals-contex
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
+import { Camera } from 'lucide-react';
 
 export default function AccountPage() {
   const { user, updateUserProfile } = useAuth();
   const { t } = useLocale();
   const { healthGoals, setHealthGoals, isLoading: goalsLoading } = useHealthGoals();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   const profileSchema = useMemo(() => z.object({
     name: z.string().min(2, t('nameMin2Chars')),
@@ -64,9 +68,43 @@ export default function AccountPage() {
   if (!user) {
     return null;
   }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+        toast({
+          variant: "destructive",
+          title: t('fileUploadErrorTitle'),
+          description: t('fileTooLarge', { size: 2 }),
+        });
+        return;
+      }
+      setPhotoFile(file);
+      setPhotoPreview(URL.createObjectURL(file));
+    }
+  };
   
   const onProfileSubmit = async (data: ProfileFormData) => {
-    await updateUserProfile({ displayName: data.name });
+    const updateData: { displayName?: string, photoURL?: string } = {
+        displayName: data.name,
+    };
+
+    if (photoFile) {
+        const reader = new FileReader();
+        const dataUri = await new Promise<string>((resolve, reject) => {
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(photoFile);
+        });
+        updateData.photoURL = dataUri;
+    }
+
+    await updateUserProfile(updateData);
+    
+    setPhotoFile(null);
+    setPhotoPreview(null);
+    
     toast({
       title: t('profileUpdatedTitle'),
       description: t('profileUpdatedDescription'),
@@ -90,10 +128,20 @@ export default function AccountPage() {
         </CardHeader>
         <CardContent>
            <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src={user.photoURL ?? ''} />
-                <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
-              </Avatar>
+               <div className="relative w-24 h-24 group">
+                 <Avatar className="h-24 w-24 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                    <AvatarImage src={photoPreview ?? user.photoURL ?? ''} alt={user.displayName ?? ''} />
+                    <AvatarFallback>{user.displayName?.[0]}</AvatarFallback>
+                 </Avatar>
+                 <div 
+                   className="absolute inset-0 bg-black/40 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                   onClick={() => fileInputRef.current?.click()}
+                 >
+                     <Camera className="h-8 w-8 text-white" />
+                 </div>
+              </div>
+              <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/png, image/jpeg" />
+
               <div className="grid gap-2">
                 <Label htmlFor="name">{t('name')}</Label>
                 <Input id="name" {...profileForm.register('name')} />
